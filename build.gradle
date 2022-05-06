@@ -1,30 +1,31 @@
 buildscript {
-    ext.buildConfig = [
-        'compileSdk': 31,
-        'minSdk'    : 23,
-        'targetSdk' : 30,
-        'javaVersion': JavaVersion.VERSION_11,
-        'jvmTarget': "11",
-    ]
+    ext {
+        compose_version = '1.2.0-alpha08'
+        roomVersion = '2.5.0-alpha01'
+        kotlin_version = '1.6.20'
+    }
     repositories {
-        mavenCentral()
-        google()
+        google()  // Google's Maven repository
     }
     dependencies {
-        classpath libs.android.gradle
-        classpath libs.androidx.navigation.args
-        classpath libs.google.firebase.crashlyticsGradle
-        classpath libs.google.gms.google.services
-        classpath libs.kotlin.gradle
-        classpath libs.dagger.hilt.gradle
+        classpath 'com.google.gms:google-services:4.3.10' // 4.3.10 does not work 4.3.5
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath 'com.google.firebase:perf-plugin:1.4.1'
     }
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        google()
-        maven { url "https://jitpack.io" }
-    }
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.3.0-alpha09' apply false
+    id 'com.android.library' version '7.3.0-alpha09' apply false
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
+    id 'org.jetbrains.kotlin.multiplatform' version "$kotlin_version" apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version" apply false
+    id 'com.google.gms.google-services' version '4.3.10' apply false
+    id 'com.google.firebase.crashlytics' version '2.8.1' apply false
 }
 
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

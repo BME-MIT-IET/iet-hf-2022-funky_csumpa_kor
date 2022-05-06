@@ -1,13 +1,9 @@
 # Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /home/valter/Android/Sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+# You can control the set of applied configuration files using the
+# proguardFiles setting in build.gradle.
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
-
-# Add any project specific keep options here:
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
@@ -24,53 +20,20 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# Dagger
--dontwarn com.google.errorprone.annotations.**
+-keepattributes Signature,SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
 
-# Retain generic type information for use by reflection by converters and adapters.
--keepattributes Signature
-# Retain declared checked exceptions for use by a Proxy instance.
--keepattributes Exceptions
+-keepclassmembers class com.remenyo.papertrader.** {
+      *;
+      }
 
-# Okio
--dontwarn okio.**
+-keepclassmembers class com.google.** {
+      *;
+      }
 
-# OkHttp
--dontwarn javax.annotation.**
+-keepclassmembers class org.ietf.** {
+      *;
+      }
 
-# PrettyTime
--keep class org.ocpsoft.prettytime.i18n.**
-
-# Data classes
--keep class sk.kasper.remote.entity.** { *; }
--keep class sk.kasper.space.database.entity.** { *; }
-
-# Crashlytics
--keepattributes SourceFile,LineNumberTable
--renamesourcefileattribute SourceFile
-
--dontnote android.net.http.*
--dontnote org.apache.commons.codec.**
--dontnote org.apache.http.**
-
--dontnote com.google.android.gms.**
--dontnote com.google.firebase.crash.FirebaseCrash
--dontnote org.robolectric.Robolectric
--dontnote android.os.SystemProperties
--dontnote com.google.protobuf.**
--dontnote sun.misc.Unsafe
--dontnote libcore.io.Memory
--dontnote kotlin.internal.**
--dontnote kotlin.reflect.jvm.internal.**
--dontnote kotlin.jvm.internal.**
--dontnote com.android.org.conscrypt.SSLParametersImpl
--dontnote org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
--dontnote sun.security.ssl.SSLContextImpl
--dontnote dalvik.system.CloseGuard
--dontnote com.google.android.material.**
--dontnote com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar
--dontnote sk.kasper.space.view.OrbitView
--dontwarn okhttp3.internal.platform.*
-
-
-
+# -keep class com.crashlytics.** { *; }
+# -dontwarn com.crashlytics.**

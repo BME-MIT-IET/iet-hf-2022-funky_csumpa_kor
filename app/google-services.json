@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "519885817840",
-    "firebase_url": "https://space-97d8f.firebaseio.com",
-    "project_id": "space-97d8f",
-    "storage_bucket": "space-97d8f.appspot.com"
+    "project_number": "705510582370",
+    "firebase_url": "https://traderapp-androidhf-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "traderapp-androidhf",
+    "storage_bucket": "traderapp-androidhf.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:519885817840:android:bdc3dc25c9996dd8",
+        "mobilesdk_app_id": "1:705510582370:android:a1c1bbdfe2a87763ce893b",
         "android_client_info": {
-          "package_name": "sk.kasper.space"
+          "package_name": "com.remenyo.papertrader"
         }
       },
       "oauth_client": [
         {
-          "client_id": "519885817840-l4vg0ehja7ulp1qidt2hcdeobdg39ojh.apps.googleusercontent.com",
+          "client_id": "705510582370-br0k97b7p04r9kbjg9007pn76i0bp752.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "sk.kasper.space",
-            "certificate_hash": "5d0c3a8343ad49b5f842583b0426d8d442f139e0"
+            "package_name": "com.remenyo.papertrader",
+            "certificate_hash": "45db7b2f7267df2e5f6362430a3ab42b0461f41c"
           }
         },
         {
-          "client_id": "519885817840-f8h22fe52e6o2vg1otaukjotsgmhp2oe.apps.googleusercontent.com",
+          "client_id": "705510582370-u4rkaaii94fd8c4hmig1l0qu5utugdof.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDrsCu-dLY2dCGiImUuvbJAaItomM79OaY"
+          "current_key": "AIzaSyA42x4hW7tFe5DnwpdG4YEb9VqPCd6tk2c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "519885817840-f8h22fe52e6o2vg1otaukjotsgmhp2oe.apps.googleusercontent.com",
+              "client_id": "705510582370-u4rkaaii94fd8c4hmig1l0qu5utugdof.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

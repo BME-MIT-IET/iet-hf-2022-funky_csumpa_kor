@@ -1,44 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="sk.kasper.space">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <!-- Mail -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent>
+    </queries>
+
+    <queries>
+        <!-- Browser -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent>
+    </queries>
+
     <application
-        android:name=".SpaceApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="${usesCleartextTraffic}"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:theme="@style/Theme.PaperTrader">
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
-        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
-
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/SpaceAppTheme"
-            android:exported="true">
-
+        <service
+            android:name=".FirebaseMessaging"
+            android:exported="false">
             <intent-filter>
-
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+        </service>
 
+        <!-- API > 24 bruh -->
+        <!-- android:usesCleartextTraffic="true"> -->
+        <!-- I don't have https on my server -->
+        <activity
+            android:name=".App"
+            android:exported="true"
+            android:theme="@style/Theme.PaperTrader">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="papertrader.app.link"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
 
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${google_maps_key}" />
-
+            android:name="google_analytics_automatic_screen_reporting_enabled"
+            android:value="false" />
         <meta-data
-            android:name="com.google.android.gms.version" />
-
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/browser_actions_bg_grey" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notif" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="true" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="true" />
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
     </application>
 
 </manifest>
