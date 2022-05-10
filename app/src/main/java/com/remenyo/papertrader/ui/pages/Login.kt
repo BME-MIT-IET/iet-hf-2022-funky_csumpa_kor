@@ -188,7 +188,13 @@ fun Login(navController: NavController<Screen>) {
                 Spacer(Modifier.height(8.dp))
                 // src: https://stackoverflow.com/a/67244131
                 val annotatedText = buildAnnotatedString {
-                    append("By signing up, you agree to the")
+                    withStyle(
+                        style = SpanStyle(
+                            color = colorScheme.secondary
+                        )
+                    ){
+                            append("By signing up, you agree to the")
+                        }
                     pushStringAnnotation(
                         tag = "ToS",// provide tag which will then be provided when you click the text
                         annotation = "ToS"
@@ -200,7 +206,13 @@ fun Login(navController: NavController<Screen>) {
                     ) {
                         append(" Terms of Service")
                     }
-                    append(" and")
+                    withStyle(
+                        style = SpanStyle(
+                            color = colorScheme.secondary
+                        )
+                    ) {
+                        append(" and")
+                    }
                     pushStringAnnotation(
                         tag = "PrivacyPolicy",// provide tag which will then be provided when you click the text
                         annotation = "PrivacyPolicy"
