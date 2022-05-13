@@ -28,6 +28,7 @@ import com.remenyo.papertrader.ui.theme.profit
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -155,7 +156,9 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
                     Spacer(Modifier.height(8.dp))
                     Box(
                         modifier = Modifier.height(230.dp)
-                    ) { Chart() }
+                    ) {
+                        Chart()
+                    }
                 }
                 Spacer(Modifier.height(16.dp))
                 Text("Orders", style = AppTypography.headlineLarge)
