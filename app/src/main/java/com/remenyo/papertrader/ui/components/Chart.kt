@@ -19,14 +19,19 @@ import com.remenyo.papertrader.SessionModel
 import com.remenyo.papertrader.ui.theme.colorScheme
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.*
+import java.util.Calendar.*
 
 fun OHLCV_toJSString(priceData: List<OHLCV>): Pair<String, String> {
+    val calendar = getInstance(Locale.getDefault());
+    val offset = -(calendar.get(ZONE_OFFSET) + calendar.get(DST_OFFSET)) / 1000
+
     var candleSticks = "["
     var volumeBars = "["
 
     for (p in priceData) {
-        candleSticks += "{time: ${p.ts}, open: ${p.open}, high: ${p.high}, low: ${p.low}, close: ${p.close}},"
-        volumeBars += "{time: ${p.ts}, value: ${p.volume}},"
+        candleSticks += "{time: ${p.ts-offset}, open: ${p.open}, high: ${p.high}, low: ${p.low}, close: ${p.close}},"
+        volumeBars += "{time: ${p.ts-offset}, value: ${p.volume}},"
     }
 
     return Pair("$candleSticks]", "$volumeBars]")
