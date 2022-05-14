@@ -28,7 +28,6 @@ import kotlin.math.roundToInt
 @Composable
 fun Settings(navController: NavController<Screen>) {
     trackScreenView("settings")
-
     Scaffold(topBar = {
         TopAppBar(text = "Settings", leftButton = { BackButton { navController.pop() } })
     }) {
@@ -67,7 +66,6 @@ fun SettingsCard(title: String, description: String, content: @Composable () -> 
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutoSaveIntervalSettings() {
     var sliderVal by remember {
@@ -77,13 +75,8 @@ fun AutoSaveIntervalSettings() {
             ).toFloat()
         )
     }
-
     val sliderValInt = derivedStateOf { sliderVal.roundToInt() }
-
-    fun updateVal() =
-        App.KVStore.encode(PreferenceKeys.autoSaveIntervalSec_long, sliderValInt.value.toLong())
-
-
+    fun updateVal() = App.KVStore.encode(PreferenceKeys.autoSaveIntervalSec_long, sliderValInt.value.toLong())
     SettingsCard(
         title = "Autosave Interval",
         description = "How often should the game do automatically save during trading?"
@@ -107,12 +100,8 @@ fun MultiplierSettings() {
             ).toFloat()
         )
     }
-
     val maxMultiplierValInt = derivedStateOf { maxMultiplier.roundToInt() }
-
-    fun updateVal() =
-        App.KVStore.encode(PreferenceKeys.maxMultiplier_int, maxMultiplierValInt.value)
-
+    fun updateVal() = App.KVStore.encode(PreferenceKeys.maxMultiplier_int, maxMultiplierValInt.value)
     SettingsCard(title = "Multiplier", description = "Maximum multiplier in game") {
         Column(Modifier.fillMaxWidth()) {
             Text("Max multi: +/- ${maxMultiplierValInt.value}x")
@@ -123,7 +112,6 @@ fun MultiplierSettings() {
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
