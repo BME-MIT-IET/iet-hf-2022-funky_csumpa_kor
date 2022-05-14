@@ -269,7 +269,11 @@ fun Login(navController: NavController<Screen>) {
                 TextButton(
                     onClick = {
                         deleteUserConfirmDialog = true
-                        // todo toast account deleted
+                        Toast.makeText(
+                            context,
+                            "Account deleted.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }, enabled = !loading
                 ) {
                     Text(text = "Delete account", style = TextStyle(color = colorScheme.error))
