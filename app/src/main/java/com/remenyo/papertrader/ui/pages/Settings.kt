@@ -37,7 +37,6 @@ fun Settings(navController: NavController<Screen>) {
             item { AutoSaveIntervalSettings() }
             item { MultiplierSettings() }
             item { AppInfo() }
-            /*item { CrashTheApp() }*/
         }
     }
 }
@@ -49,21 +48,6 @@ fun AppInfo() {
         Text("UserID: ${Auth.uid}")
     }
 }
-
-/*@Composable
-fun CrashTheApp() {
-    SettingsCard(
-        title = "Test crash",
-        description = "Crash the app to test Crashlytics integration"
-    ) {
-        TextButton(onClick = {
-            AnalyticsHelper.reportLog("Test Log")
-            throw RuntimeException("Test crash")
-        }) {
-            Text(text = "CRASH", color = colorScheme.error)
-        }
-    }
-}*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
