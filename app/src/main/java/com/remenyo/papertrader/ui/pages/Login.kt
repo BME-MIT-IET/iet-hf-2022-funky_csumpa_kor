@@ -2,6 +2,7 @@ package com.remenyo.papertrader.ui.components
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -165,7 +166,19 @@ fun Login(navController: NavController<Screen>) {
                                     openEmailDialog = true
                                 }
                                 loading = false
-                                // todo else toast failure
+                                if (Auth.signedIn) {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to sign in / sign up",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to login",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
                     },
