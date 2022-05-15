@@ -39,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -425,7 +426,9 @@ fun Trading(
                         }
                     Box(
                         modifier = Modifier.height(230.dp)
-                    ) { Chart() }
+                    ) {
+                        Chart()
+                    }
                     if (!SessionModel.sessionDone) {
                         Spacer(Modifier.height(10.dp))
                         ExecutorBox()
