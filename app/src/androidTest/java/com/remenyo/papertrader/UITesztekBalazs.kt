@@ -7,7 +7,7 @@ import androidx.compose.ui.test.performClick
 import org.junit.Rule
 import org.junit.Test
 
-class UnitTest {
+class UITesztekBalazs {
     @get:Rule
     val composeTestRule = createComposeRule()
     // use createAndroidComposeRule<YourActivity>() if you need access to
