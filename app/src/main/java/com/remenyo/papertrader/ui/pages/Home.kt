@@ -16,6 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -86,7 +88,9 @@ fun Home(navController: NavController<Screen>) {
             }
         })
     }, floatingActionButton = {
-        ExtendedFloatingActionButton(content = {
+        ExtendedFloatingActionButton(
+            modifier = Modifier.semantics { testTag = "new session tag" },
+            content = {
             Icon(Icons.Default.Add, "Add")
             Spacer(Modifier.width(8.dp))
             Text("New Session")

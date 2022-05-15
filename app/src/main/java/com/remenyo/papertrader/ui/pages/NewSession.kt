@@ -14,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.remenyo.papertrader.API
@@ -330,7 +332,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             Spacer(Modifier.height(16.dp))
             Button(
                 enabled = !loading && timespanAvailable,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().semantics { testTag = "trade button tag" },
                 onClick = {
                     coroutineScope.launch {
                         loading = true
