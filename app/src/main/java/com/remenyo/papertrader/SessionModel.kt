@@ -47,7 +47,7 @@ object SessionModel {
             }
             isSessionDirty = false
         } else if (isTimestampDirty) {
-            Log.d(TAG, "Updating session currentTS")
+//            Log.d(TAG, "Updating session currentTS")
             if (!RealtimeDBRepo.updateSessionCurrentTS(sessionData)) {
                 Log.e(TAG, "saveSession updateSessionCurrentTS")
                 return false
@@ -190,7 +190,7 @@ object SessionModel {
         }*/
 
         fun advanceSession(seconds: Long) {
-            Log.i(TAG, "Advance by $seconds")
+            //Log.i(TAG, "Advance by $seconds")
             val newTS = currentTimestamp + seconds
             candles_view.filter { it.ts in (currentTimestamp + 1)..newTS }.forEach { candle ->
                 sessionData.orders.forEach { (id, order) ->
