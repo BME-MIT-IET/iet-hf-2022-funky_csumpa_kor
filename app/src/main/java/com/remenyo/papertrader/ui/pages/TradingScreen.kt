@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
@@ -345,7 +346,8 @@ fun Trading(
                         .weight(1f),
                     enabled = bepCorrect() && sepCorrect() && multiCorrect() && (!trailingEnabled || trailCorrect())
                 ) {
-                    Text("Limit @ $bep", textAlign = TextAlign.Center, modifier = Modifier.semantics { testTag="limit" })
+                    Text("Limit @ $bep", textAlign = TextAlign.Center,
+                        modifier = Modifier.testTag("limit"))
                 }
                 Spacer(Modifier.width(8.dp))
                 OutlinedButton(
