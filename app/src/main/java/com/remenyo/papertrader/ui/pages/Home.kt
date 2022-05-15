@@ -114,6 +114,7 @@ fun Home(navController: NavController<Screen>) {
 
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                         if (Auth.isUserAnon) TextButton(
+                            modifier= Modifier.semantics { testTag = "udvozol" },
                             onClick = { navController.navigate(Screen.Login) },
                             content = {
                                 Text(
@@ -152,7 +153,9 @@ fun SessionCard(session: UserSessionData, navController: NavController<Screen>) 
     Card(
         Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate(Screen.SessionInfo(session.id)) }
+            .clickable {
+                navController.navigate(Screen.SessionInfo(session.id))
+            }
     ) {
         Column(Modifier.padding(8.dp)) {
             if (session.startTS != 0.toLong() && session.endTS != 0.toLong())

@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -143,7 +145,7 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
                     )
                     Spacer(Modifier.height(16.dp))
                     Button(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().semantics { testTag="trade" },
                         onClick = { navController.navigate(Screen.SessionPlay(SessionModel.sessionData.id)) }) {
                         Text(if (SessionModel.currentTimestamp < SessionModel.sessionData.endTS) "Trade" else "View chart")
                     }

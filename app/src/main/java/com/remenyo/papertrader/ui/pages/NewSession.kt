@@ -332,7 +332,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             Spacer(Modifier.height(16.dp))
             Button(
                 enabled = !loading && timespanAvailable,
-                modifier = Modifier.fillMaxWidth().semantics { testTag = "trade button tag" },
+                modifier = Modifier.fillMaxWidth().semantics { testTag = "create button tag" },
                 onClick = {
                     coroutineScope.launch {
                         loading = true

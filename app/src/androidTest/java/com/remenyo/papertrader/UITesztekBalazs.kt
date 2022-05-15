@@ -1,5 +1,8 @@
 package com.remenyo.papertrader
 
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.with
@@ -52,14 +55,46 @@ class UITesztekBalazs {
             }
         })
         composeTestRule.onNodeWithTag("new session tag").performClick()
-        composeTestRule.onNodeWithTag("trade button tag").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("trade button tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+        val handler = Handler(Looper.getMainLooper()).postDelayed({
+            composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
+            composeTestRule.onNodeWithTag("trade").performClick()
+            composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
+        }, 10000)
 
-        //composeTestRule.onNodeWithTag("bep szovegmezo").performTextClearance()
-        //composeTestRule.onNodeWithTag("bep szovegmezo").performTextInput("1234")
+        handler
+        //Thread.sleep(10000)
 
-       // composeTestRule.onNodeWithTag("limit").assertTextEquals("Limit @ 1234")
+
+       /* val r = Runnable {
+            igaz() //<-- put your code in here.
+        }
+
+        val h = Handler()
+        h.postDelayed(r, 10000)*/
+
+        //composeTestRule.(10000, condition = { igaz() })
+
+        //Thread.sleep(10000)
+        //SystemClock.sleep(1500);
+
+
+
+        //igaz()
+
 
 
     }
+
+    fun igaz(): Boolean{
+        composeTestRule.onNodeWithTag("bep szovegmezo").performTextClearance()
+        composeTestRule.onNodeWithTag("bep szovegmezo").performTextInput("1234")
+
+        composeTestRule.onNodeWithTag("limit").assertTextEquals("Limit @ 1234")
+
+        return true
+    }
+
+
 }
