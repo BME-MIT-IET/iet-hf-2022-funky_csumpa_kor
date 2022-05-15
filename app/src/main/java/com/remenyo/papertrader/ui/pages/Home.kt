@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -81,7 +82,7 @@ fun Home(navController: NavController<Screen>) {
                 }
             }
         }, rightButton = {
-            IconButton(onClick = { navController.navigate(Screen.Login) }) {
+            IconButton(onClick = { navController.navigate(Screen.Login) }, modifier = Modifier.testTag("account")) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.AccountCircle, "Account")
                 }
@@ -130,7 +131,8 @@ fun Home(navController: NavController<Screen>) {
                     if (userSessions.isEmpty()) {
                         Text(
                             "You don't have any sessions yet.\nClick New Session to start.",
-                            style = AppTypography.labelLarge
+                            style = AppTypography.labelLarge,
+                            modifier = Modifier.testTag("no sessions")
                         )
                     } else {
                         LazyColumn(Modifier.fillMaxHeight()) {

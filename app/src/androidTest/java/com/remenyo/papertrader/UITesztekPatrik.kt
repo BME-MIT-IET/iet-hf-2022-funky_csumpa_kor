@@ -24,42 +24,31 @@ class UITesztekPatrik {
     //val composeTestRule = createComposeRule()
     // use createAndroidComposeRule<YourActivity>() if you need access to
     // an activity
-    
+
+    @Test
+    fun felhasznaloTorles(){
+        composeTestRule.onNodeWithTag("account").performClick()
+        composeTestRule.onNodeWithTag("delete account").performClick()
+        composeTestRule.onNodeWithTag("sure to delete account").performClick()
+
+        composeTestRule.activity.
+
+        composeTestRule.waitUntil(15000){
+            try {
+                composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+
+        //composeTestRule.onNodeWithTag("trade")
+    }
+
 
     @OptIn(ExperimentalAnimationApi::class)
     @Test
-    fun myTest() {
-        /*composeTestRule.setContent ( composable = {
-            var navController = rememberNavController(mutableListOf<Screen>(Screen.Home))
-            AppTheme {
-                AnimatedNavHost(navController, transitionSpec = { action, _, _ ->
-                    val direction = if (action == NavAction.Pop) {
-                        AnimatedContentScope.SlideDirection.Down
-                    } else {
-                        AnimatedContentScope.SlideDirection.Up
-                    }
-                    slideIntoContainer(direction) with slideOutOfContainer(direction)
-                }) { screen ->
-                    when (screen) {
-                        is Screen.Login -> Login(navController)
-                        is Screen.Home -> Home(navController)
-                        is Screen.NewSession -> NewSession(
-                            navController, screen.start, screen.end
-                        )
-                        is Screen.SessionInfo -> SessionInfo(
-                            navController, screen.id
-                        )
-                        is Screen.SessionPlay -> Trading(
-                            navController, screen.id
-                        )
-                        is Screen.Settings -> Settings(navController)
-                    }
-                }
-            }
-        })*/
-
-        MMKV.initialize(InstrumentationRegistry.getInstrumentation().context)
-        App.KVStore = MMKV.mmkvWithID("App")
+    fun limitValtoztat() {
 
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
@@ -67,7 +56,6 @@ class UITesztekPatrik {
         composeTestRule.waitUntil( 15000) {
             EllenorizEngedelyez()
         }
-
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
@@ -86,8 +74,6 @@ class UITesztekPatrik {
         }
 
         composeTestRule.onNodeWithTag("limit").assertTextEquals("Limit @ 1234")
-
-
     }
 
 

@@ -1,5 +1,6 @@
 package com.remenyo.papertrader
 
+import android.os.AsyncTask
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -8,12 +9,17 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.with
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.InstrumentationRegistry.getTargetContext
+import androidx.test.platform.app.InstrumentationRegistry
 import com.remenyo.papertrader.ui.components.*
 import com.remenyo.papertrader.ui.components.trading.Trading
 import com.remenyo.papertrader.ui.theme.AppTheme
+import com.tencent.mmkv.MMKV
 import dev.olshevski.navigation.reimagined.*
 import org.junit.Rule
 import org.junit.Test
+import java.lang.AssertionError
+import java.lang.Exception
 
 class UITesztekBalazs {
     @get:Rule
@@ -54,16 +60,28 @@ class UITesztekBalazs {
                 }
             }
         })
+
+        MMKV.initialize(InstrumentationRegistry.getInstrumentation().context)
+        App.KVStore = MMKV.mmkvWithID("App")
+
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("create button tag").performClick()
-        val handler = Handler(Looper.getMainLooper()).postDelayed({
-            composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
-            composeTestRule.onNodeWithTag("trade").performClick()
-            composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
-        }, 10000)
 
-        handler
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+        composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
+    }
+
+    //handler.post()
         //Thread.sleep(10000)
 
 
@@ -83,16 +101,33 @@ class UITesztekBalazs {
 
         //igaz()
 
+    /*fun igaz(): Boolean{
+        val handler = Handler(Looper.getMainLooper()).postDelayed({
+            composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
+            composeTestRule.onNodeWithTag("trade").performClick()
+            composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
+            return true
+        }, 0)
+        AsyncTask.execute { composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
+            composeTestRule.onNodeWithTag("trade").performClick()
+            composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed() }
+    }*/
 
-
+    fun Ellenoriz(): Boolean{
+        try{
+            composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
+        }catch (e: AssertionError){
+            return false
+        }
+        return true
     }
 
-    fun igaz(): Boolean{
-        composeTestRule.onNodeWithTag("bep szovegmezo").performTextClearance()
-        composeTestRule.onNodeWithTag("bep szovegmezo").performTextInput("1234")
-
-        composeTestRule.onNodeWithTag("limit").assertTextEquals("Limit @ 1234")
-
+    fun EllenorizEngedelyez():Boolean{
+        try {
+            composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()
+        }catch (e: AssertionError){
+            return false
+        }
         return true
     }
 

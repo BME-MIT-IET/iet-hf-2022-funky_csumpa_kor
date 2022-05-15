@@ -343,11 +343,11 @@ fun Trading(
                     onClick = { sendLimitOrder() },
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(1f),
+                        .weight(1f)
+                        .testTag("limit"),
                     enabled = bepCorrect() && sepCorrect() && multiCorrect() && (!trailingEnabled || trailCorrect())
                 ) {
-                    Text("Limit @ $bep", textAlign = TextAlign.Center,
-                        modifier = Modifier.testTag("limit"))
+                    Text("Limit @ $bep", textAlign = TextAlign.Center)
                 }
                 Spacer(Modifier.width(8.dp))
                 OutlinedButton(
