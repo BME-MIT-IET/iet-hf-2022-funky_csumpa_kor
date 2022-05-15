@@ -79,20 +79,9 @@ fun Home(navController: NavController<Screen>) {
                 }
             }
         }, rightButton = {
-            if (false /*Auth.isUserAnon*/) { // it is too big
-                OutlinedButton(
-                    shape = RoundShapes.large,
-                    onClick = { navController.navigate(Screen.Login) }) {
-                    // its too wide on small displays
-                    /*Icon(Icons.Default.AccountCircle, "Account")
-                    Spacer(Modifier.width(8.dp))*/
-                    Text("Log In")
-                }
-            } else {
-                IconButton(onClick = { navController.navigate(Screen.Login) }) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.AccountCircle, "Account")
-                    }
+            IconButton(onClick = { navController.navigate(Screen.Login) }) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.AccountCircle, "Account")
                 }
             }
         })
