@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -276,7 +278,7 @@ fun Trading(
                         onDone = { keyboardController?.hide() }),
                     singleLine = true,
                     placeholder = { Text("Where buy happens") },
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).semantics { testTag = "bep szovegmezo" },
                     isError = !bepCorrect() && bep.isNotEmpty(),
                 )
                 Spacer(Modifier.width(8.dp))
@@ -343,7 +345,7 @@ fun Trading(
                         .weight(1f),
                     enabled = bepCorrect() && sepCorrect() && multiCorrect() && (!trailingEnabled || trailCorrect())
                 ) {
-                    Text("Limit @ $bep", textAlign = TextAlign.Center)
+                    Text("Limit @ $bep", textAlign = TextAlign.Center, modifier = Modifier.semantics { testTag="limit" })
                 }
                 Spacer(Modifier.width(8.dp))
                 OutlinedButton(
