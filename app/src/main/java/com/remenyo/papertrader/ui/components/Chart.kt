@@ -14,19 +14,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.remenyo.papertrader.App
 import com.remenyo.papertrader.OHLCV
 import com.remenyo.papertrader.SessionModel
 import com.remenyo.papertrader.ui.theme.colorScheme
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.*
+import java.util.Calendar.*
 
-fun OHLCV_toJSString(priceData: List<OHLCV>): Pair<String, String> {
+fun OHLCV_toJSString(priceData: List<OHLCV>, offset: Int): Pair<String, String> {
+
     var candleSticks = "["
     var volumeBars = "["
 
     for (p in priceData) {
-        candleSticks += "{time: ${p.ts}, open: ${p.open}, high: ${p.high}, low: ${p.low}, close: ${p.close}},"
-        volumeBars += "{time: ${p.ts}, value: ${p.volume}},"
+        candleSticks += "{time: ${p.ts-offset}, open: ${p.open}, high: ${p.high}, low: ${p.low}, close: ${p.close}},"
+        volumeBars += "{time: ${p.ts-offset}, value: ${p.volume}},"
     }
 
     return Pair("$candleSticks]", "$volumeBars]")
@@ -50,6 +54,7 @@ fun colorConverter(intColor: Int) = "#%06X".format(0xFFFFFF and intColor)
 @Composable
 fun Chart() {
     var currentTimestamp by remember { mutableStateOf<Long>(0) }
+
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -60,7 +65,7 @@ fun Chart() {
 
                 loadData(ChartBinary.chartPageBase64, "text/html", "base64")
 
-                val (price, volume) = OHLCV_toJSString(SessionModel.candles_view.filter { it.ts <= SessionModel.currentCandle.ts })
+                val (price, volume) = OHLCV_toJSString(SessionModel.candles_view.filter { it.ts <= SessionModel.currentCandle.ts }, App.offset)
                 Log.d(
                     "PaperTrader_Chart_Apply",
                     "Apply ${SessionModel.candles_view.filter { it.ts <= SessionModel.currentTimestamp }.size} candles"
@@ -97,8 +102,11 @@ fun Chart() {
             }
         },
         update = { webView ->
+
             // get the new candles
-            val (price, volume) = OHLCV_toJSString(SessionModel.candles_view.filter { it.ts > currentTimestamp && it.ts <= SessionModel.currentCandle.ts })
+            val (price, volume) = OHLCV_toJSString(
+                SessionModel.candles_view.filter { it.ts > currentTimestamp && it.ts <= SessionModel.currentCandle.ts },
+                App.offset)
             if (price.isNotEmpty()) {
                 webView.evaluateJavascript("${price}.forEach(it=>candles.update(it))", null)
                 webView.evaluateJavascript("${volume}.forEach(it=>volume.update(it))", null)
