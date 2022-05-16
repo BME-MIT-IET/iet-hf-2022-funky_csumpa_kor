@@ -3,6 +3,7 @@ package com.remenyo.papertrader
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.with
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -17,6 +18,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.lang.AssertionError
+import java.text.SimpleDateFormat
+import java.util.*
 
 class UITesztekPatrik {
     @get:Rule
@@ -25,13 +28,86 @@ class UITesztekPatrik {
     // use createAndroidComposeRule<YourActivity>() if you need access to
     // an activity
 
+    fun getUnixTsFromDate(mYear: Int, mMonth: Int, mDay: Int): Long {
+        val c = Calendar.getInstance()
+        c.set(mYear, mMonth, mDay, 0, 0)
+        return c.timeInMillis
+    }
+
+    @Test
+    fun randomGombEllenorzes(){
+        randomDate=true
+
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("randomize").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        var tartalmazas=false
+        try {
+            composeTestRule.onNodeWithTag("first date")
+                .assertTextContains(SimpleDateFormat.getDateInstance()
+                    .format(getUnixTsFromDate(sYear, sMonth, sDay)))
+        }catch (e: AssertionError){
+            tartalmazas=true
+        }
+        if(!tartalmazas){
+            throw AssertionError("A dátum nem változott meg a randomizálás gombra")
+        }
+    }
+
+    @Test
+    fun letrehozSessionSikeres(){
+        randomDate=true
+
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+    }
+
+    @Test
+    fun letrehozSessionSikertelen(){
+        randomDate=false
+        sYear=  2022
+        sMonth=  5
+        sDay=  16
+        eYear= mutableStateOf( 2022)
+        eMonth= mutableStateOf( 5)
+        eDay= mutableStateOf( 16)
+
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            try {
+                composeTestRule.onNodeWithTag("not available").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+        //composeTestRule.onNodeWithTag("create button tag").performClick()
+
+
+
+    }
+
     @Test
     fun felhasznaloTorles(){
         composeTestRule.onNodeWithTag("account").performClick()
         composeTestRule.onNodeWithTag("delete account").performClick()
         composeTestRule.onNodeWithTag("sure to delete account").performClick()
-
-        composeTestRule.activity.
+        //composeTestRule.onNodeWithTag("sure to delete account").perform
 
         composeTestRule.waitUntil(15000){
             try {
@@ -49,6 +125,7 @@ class UITesztekPatrik {
     @OptIn(ExperimentalAnimationApi::class)
     @Test
     fun limitValtoztat() {
+        randomDate=true
 
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
