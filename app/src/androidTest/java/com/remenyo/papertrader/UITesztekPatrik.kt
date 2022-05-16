@@ -1,5 +1,6 @@
 package com.remenyo.papertrader
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.with
@@ -14,6 +15,7 @@ import com.remenyo.papertrader.ui.components.trading.Trading
 import com.remenyo.papertrader.ui.theme.AppTheme
 import com.tencent.mmkv.MMKV
 import dev.olshevski.navigation.reimagined.*
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,9 +37,213 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun randomGombEllenorzes(){
-        randomDate=true
+    fun munkamenetInformacioOldal(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+        composeTestRule.onNodeWithTag("market").performClick()
+        composeTestRule.onNodeWithTag("limit").performClick()
+        composeTestRule.onNodeWithTag("back").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            try {
+                composeTestRule.onNodeWithTag("not yet opened").assertIsDisplayed()
+                composeTestRule.onNodeWithTag("opened").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+    }
+
+    @Test
+    fun limitCsempe(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+        composeTestRule.onNodeWithTag("limit").performClick()
+        composeTestRule.waitUntil( 15000) {
+            try {
+                //composeTestRule.onNodeWithTag("not yet opened").assertIsDisplayed()
+                composeTestRule.onNodeWithTag("cancel").assertIsDisplayed()
+
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+
+        composeTestRule.onNodeWithTag("cancel").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            try {
+                composeTestRule.onNodeWithTag("cancelled").assertIsDisplayed()
+                //composeTestRule.onNodeWithTag("cancel").assertIsNotDisplayed()
+            }catch (e: AssertionError){
+                //composeTestRule.onNodeWithTag("cancel").performClick()
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+    }
+
+    @Test
+    fun marketCsempe(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+        composeTestRule.onNodeWithTag("market").performClick()
+        composeTestRule.waitUntil( 15000) {
+            try {
+                //composeTestRule.onNodeWithTag("opened").assertIsDisplayed()
+                composeTestRule.onNodeWithTag("market close").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+
+        composeTestRule.onNodeWithTag("market close").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            try {
+                composeTestRule.onNodeWithTag("closed").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+    }
+
+    @Test
+    fun helytelenBep(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("bep").performTextReplacement("éáőúűóüö")
+        composeTestRule.onNodeWithTag("limit").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("market").assertIsEnabled()
+        composeTestRule.onNodeWithTag("bep").performTextReplacement("123")
+        composeTestRule.onNodeWithTag("limit").assertIsEnabled()
+    }
+
+    @Test
+    fun helytelenSep(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("sep").performTextReplacement("éáőúűóüö")
+        composeTestRule.onNodeWithTag("limit").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("market").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("sep").performTextReplacement("123")
+        composeTestRule.onNodeWithTag("limit").assertIsEnabled()
+        composeTestRule.onNodeWithTag("market").assertIsEnabled()
+
+    }
+
+    @Test
+    fun helytelenKoveto(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("trailing stop").performClick()
+        composeTestRule.onNodeWithTag("trail value").assertIsEnabled()
+        composeTestRule.onNodeWithTag("trail value").performTextReplacement("éáőúűó")
+        composeTestRule.onNodeWithTag("limit").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("market").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("trail value").performTextReplacement("123")
+        composeTestRule.onNodeWithTag("limit").assertIsEnabled()
+        composeTestRule.onNodeWithTag("market").assertIsEnabled()
+
+    }
+
+    @Test
+    fun kovetoBeallit(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("trailing stop").performClick()
+        composeTestRule.onNodeWithTag("trail value").assertIsEnabled()
+        composeTestRule.onNodeWithTag("trailing stop").performClick()
+        composeTestRule.onNodeWithTag("trail value").assertIsNotEnabled()
+    }
+
+    @Test
+    fun randomGombEllenorzes(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -62,18 +268,90 @@ class UITesztekPatrik {
         if(!tartalmazas){
             throw AssertionError("A dátum nem változott meg a randomizálás gombra")
         }
+
+
     }
 
     @Test
     fun letrehozSessionSikeres(){
-        randomDate=true
-
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
         composeTestRule.waitUntil( 15000) {
             EllenorizEngedelyez()
         }
+    }
+
+    @Test
+    fun letrehozSessionPlusz1oraBepipalva(){
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        try {
+            composeTestRule.onNodeWithTag("plus one hour").assertIsOn()
+        }catch (e: AssertionError){
+            composeTestRule.onNodeWithTag("plus one hour").performClick()
+        }
+
+        val startTime = composeTestRule.onNodeWithTag("start time")
+        var noveltIdo:Int=0
+
+        for ((key, value) in startTime.fetchSemanticsNode().config) {
+            if (key.name == "Text"){
+                var eredmeny = value.toString()
+                eredmeny=eredmeny.substring(13, eredmeny.indexOf(':'))
+                noveltIdo=eredmeny.toInt()+1
+            }
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("active time").assertTextContains("$noveltIdo:0",true)
+    }
+
+    @Test
+    fun letrehozSessionPlusz1oraNincsPipa() {
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+
+        try {
+            composeTestRule.onNodeWithTag("plus one hour").assertIsOff()
+        }catch (e: AssertionError){
+            composeTestRule.onNodeWithTag("plus one hour").performClick()
+        }
+
+        val startTime = composeTestRule.onNodeWithTag("start time")
+        var ido:Int=0
+
+        for ((key, value) in startTime.fetchSemanticsNode().config) {
+            if (key.name == "Text"){
+                var eredmeny = value.toString()
+                eredmeny=eredmeny.substring(13, eredmeny.indexOf(':'))
+                ido=eredmeny.toInt()
+            }
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            Ellenoriz()
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("active time").assertTextContains("$ido:0",true)
     }
 
     @Test
@@ -98,7 +376,7 @@ class UITesztekPatrik {
         }
         //composeTestRule.onNodeWithTag("create button tag").performClick()
 
-
+        randomDate=true
 
     }
 
@@ -121,12 +399,8 @@ class UITesztekPatrik {
         //composeTestRule.onNodeWithTag("trade")
     }
 
-
-    @OptIn(ExperimentalAnimationApi::class)
     @Test
     fun limitValtoztat() {
-        randomDate=true
-
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -140,11 +414,11 @@ class UITesztekPatrik {
             Ellenoriz()
         }
         composeTestRule.onNodeWithTag("trade").performClick()
-        composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("bep").assertIsDisplayed()
 
 
-        composeTestRule.onNodeWithTag("bep szovegmezo").performTextClearance()
-        composeTestRule.onNodeWithTag("bep szovegmezo").performTextInput("1234")
+        composeTestRule.onNodeWithTag("bep").performTextClearance()
+        composeTestRule.onNodeWithTag("bep").performTextInput("1234")
 
         composeTestRule.waitUntil( 15000) {
             EllenorizLimit()
@@ -180,6 +454,8 @@ class UITesztekPatrik {
         }
         return true
     }
+
+
 
 
 }

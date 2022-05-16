@@ -298,7 +298,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             Row {
                 OutlinedButton(
                     shape = RoundShapes.medium,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("start time"),
                     onClick = {
                         startOrEndDate = true
                         makeTimePickerDialog(context).show()
@@ -329,7 +329,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = addOneHour, onCheckedChange = { addOneHour = it })
+                Checkbox(modifier=Modifier.testTag("plus one hour") ,checked = addOneHour, onCheckedChange = { addOneHour = it })
                 Text(
                     "Start from T+1h (Have price history at start)",
                     modifier = Modifier.clickable { addOneHour = !addOneHour })

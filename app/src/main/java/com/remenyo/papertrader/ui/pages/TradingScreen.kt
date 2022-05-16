@@ -160,7 +160,8 @@ fun Trading(
                         .background(colorScheme.primary)
                         .padding(4.dp, 2.dp)
                         .fillMaxHeight()
-                        .clickable { tradingActive = !tradingActive },
+                        .clickable { tradingActive = !tradingActive }
+                        .testTag("trading active"),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (tradingActive) Icon(
@@ -184,6 +185,7 @@ fun Trading(
                 ) {
                     Text(
                         longTimeFromUnixTimestamp(ts = SessionModel.currentTimestamp),
+                        modifier=Modifier.testTag("active time"),
                         color = colorScheme.onPrimary,
                         style = TextStyle(fontWeight = FontWeight.W600)
                     )
@@ -279,7 +281,7 @@ fun Trading(
                         onDone = { keyboardController?.hide() }),
                     singleLine = true,
                     placeholder = { Text("Where buy happens") },
-                    modifier = Modifier.weight(1f).semantics { testTag = "bep szovegmezo" },
+                    modifier = Modifier.weight(1f).semantics { testTag = "bep" },
                     isError = !bepCorrect() && bep.isNotEmpty(),
                 )
                 Spacer(Modifier.width(8.dp))
@@ -295,7 +297,7 @@ fun Trading(
                         onDone = { keyboardController?.hide() }),
                     singleLine = true,
                     placeholder = { Text("Where sell happens") },
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("sep"),
                     isError = !sepCorrect() && sep.isNotEmpty()
                 )
             }
@@ -315,7 +317,10 @@ fun Trading(
                 }*/
                 Text("Trailing stop")
                 Spacer(Modifier.width(8.dp))
-                Switch(checked = trailingEnabled, onCheckedChange = { trailingEnabled = it })
+                Switch(
+                    checked = trailingEnabled,
+                    onCheckedChange = { trailingEnabled = it },
+                    modifier = Modifier.testTag("trailing stop"))
                 Spacer(Modifier.width(8.dp))
                 TextField(
                     value = trailAmount,
@@ -331,7 +336,8 @@ fun Trading(
                     placeholder = { Text("Follows price by this amount") },
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight(),
+                        .fillMaxHeight()
+                        .testTag("trail value"),
                     isError = !trailCorrect() && trailingEnabled,
                     enabled = trailingEnabled
                 )
@@ -355,7 +361,8 @@ fun Trading(
                     onClick = { sendMarketOrder() },
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(1f),
+                        .weight(1f)
+                        .testTag("market"),
                     enabled = sepCorrect() && multiCorrect() && (!trailingEnabled || trailCorrect())
                 ) {
                     Text(
