@@ -110,7 +110,7 @@ fun MultiplierSettings() {
             Slider(value = maxMultiplier, onValueChange = {
                 maxMultiplier = it
                 updateVal()
-            }, valueRange = 1f..20f, modifier = Modifier.padding(8.dp, 24.dp), steps = 20)
+            }, valueRange = 1f..20f, modifier = Modifier.testTag("multiplierSliderTag").padding(8.dp, 24.dp), steps = 20)
         }
     }
 }
