@@ -140,7 +140,7 @@ fun Login(navController: NavController<Screen>) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     singleLine = true,
                     placeholder = { Text("user@mail.com") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("emailInputTag"),
                 )
             }
             Spacer(modifier = Modifier.height(48.dp))
@@ -165,14 +165,6 @@ fun Login(navController: NavController<Screen>) {
                             coroutineScope.launch {
                                 if (Auth.startEmailLogin(email)) {
                                     openEmailDialog = true
-                                }
-                                loading = false
-                                if (Auth.signedIn) {
-                                    Toast.makeText(
-                                        context,
-                                        "Failed to sign in / sign up",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
                                 } else {
                                     Toast.makeText(
                                         context,
@@ -180,10 +172,11 @@ fun Login(navController: NavController<Screen>) {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
+                                loading = false
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("loginButtonTag"),
                     shape = RoundShapes.small,
                     enabled = !loading
                 ) {
