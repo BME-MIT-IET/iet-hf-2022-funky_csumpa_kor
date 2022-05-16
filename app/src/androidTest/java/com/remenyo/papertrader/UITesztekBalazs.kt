@@ -36,13 +36,14 @@ class UITesztekBalazs {
     }
 
     @Test
-    fun progressSzazSzazalek(){
+    fun progressNemSzazSzazalek(){
+        sHour = 8
+        eHour = 16
         composeTestRule.onNodeWithTag("account").performClick()
         composeTestRule.onNodeWithTag("delete account").performClick()
         composeTestRule.onNodeWithTag("sure to delete account").performClick()
         composeTestRule.waitUntil(15000){
             try {
-                //composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()
                 composeTestRule.onNodeWithTag("new session tag").assertIsDisplayed()
             }catch (e: AssertionError){
                 return@waitUntil false
@@ -76,7 +77,7 @@ class UITesztekBalazs {
     }
 
     @Test
-    fun progressNemSzazSzazalek(){
+    fun progressSzazSzazalek(){
         sHour = 8
         eHour = 9
         composeTestRule.onNodeWithTag("account").performClick()
@@ -84,7 +85,6 @@ class UITesztekBalazs {
         composeTestRule.onNodeWithTag("sure to delete account").performClick()
         composeTestRule.waitUntil(15000){
             try {
-                //composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()
                 composeTestRule.onNodeWithTag("new session tag").assertIsDisplayed()
             }catch (e: AssertionError){
                 return@waitUntil false
@@ -165,6 +165,16 @@ class UITesztekBalazs {
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithText("1x").assertIsDisplayed()
     }
+
+    /* Nem jo nem látja a toast messaget
+    @Test
+    fun loginGombMukodik(){
+        composeTestRule.onNodeWithTag("account").performClick()
+        composeTestRule.onNodeWithTag("emailInputTag").performTextInput("invalid email")
+        composeTestRule.onNodeWithTag("loginButtonTag").performClick()
+        composeTestRule.onNode(matcher = hasText("Failed to login")).assertIsDisplayed()
+    }
+    */
 
     fun Ellenoriz(): Boolean{
         try{
