@@ -8,6 +8,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.with
 import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.platform.app.InstrumentationRegistry
@@ -23,95 +24,100 @@ import java.lang.Exception
 
 class UITesztekBalazs {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<App>()
     // use createAndroidComposeRule<YourActivity>() if you need access to
     // an activity
 
-    @OptIn(ExperimentalAnimationApi::class)
+
     @Test
-    fun myTest() {
-        // Start the app
+    fun beallitasGombMukodik(){
+        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
+        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+    }
 
-        composeTestRule.setContent ( composable = {
-            var navController = rememberNavController(mutableListOf<Screen>(Screen.Home))
-            AppTheme {
-                AnimatedNavHost(navController, transitionSpec = { action, _, _ ->
-                    val direction = if (action == NavAction.Pop) {
-                        AnimatedContentScope.SlideDirection.Down
-                    } else {
-                        AnimatedContentScope.SlideDirection.Up
-                    }
-                    slideIntoContainer(direction) with slideOutOfContainer(direction)
-                }) { screen ->
-                    when (screen) {
-                        is Screen.Login -> Login(navController)
-                        is Screen.Home -> Home(navController)
-                        is Screen.NewSession -> NewSession(
-                            navController, screen.start, screen.end
-                        )
-                        is Screen.SessionInfo -> SessionInfo(
-                            navController, screen.id
-                        )
-                        is Screen.SessionPlay -> Trading(
-                            navController, screen.id
-                        )
-                        is Screen.Settings -> Settings(navController)
-                    }
-                }
+    @Test
+    fun progressSzazSzazalek(){
+        composeTestRule.onNodeWithTag("account").performClick()
+        composeTestRule.onNodeWithTag("delete account").performClick()
+        composeTestRule.onNodeWithTag("sure to delete account").performClick()
+        composeTestRule.waitUntil(15000){
+            try {
+                //composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()
+                composeTestRule.onNodeWithTag("new session tag").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
             }
-        })
-
-        MMKV.initialize(InstrumentationRegistry.getInstrumentation().context)
-        App.KVStore = MMKV.mmkvWithID("App")
-
+            return@waitUntil true
+        }
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
-
         composeTestRule.waitUntil( 15000) {
             EllenorizEngedelyez()
         }
-
-
         composeTestRule.onNodeWithTag("create button tag").performClick()
-
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
+        composeTestRule.waitUntil(15000){
+            try {
+                composeTestRule.onNodeWithText("Session info").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
         }
-        composeTestRule.onNodeWithTag("trade").performClick()
-        composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        composeTestRule.waitUntil(15000){
+            try {
+                composeTestRule.onNodeWithTag("sessionCardTag").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+        composeTestRule.onNodeWithText("Progress: 100%").assertDoesNotExist()
     }
 
-    //handler.post()
-        //Thread.sleep(10000)
-
-
-       /* val r = Runnable {
-            igaz() //<-- put your code in here.
+    @Test
+    fun progressNemSzazSzazalek(){
+        sHour = 8
+        eHour = 9
+        composeTestRule.onNodeWithTag("account").performClick()
+        composeTestRule.onNodeWithTag("delete account").performClick()
+        composeTestRule.onNodeWithTag("sure to delete account").performClick()
+        composeTestRule.waitUntil(15000){
+            try {
+                //composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()
+                composeTestRule.onNodeWithTag("new session tag").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
         }
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+        composeTestRule.waitUntil( 15000) {
+            EllenorizEngedelyez()
+        }
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+        composeTestRule.waitUntil(15000){
+            try {
+                composeTestRule.onNodeWithText("Session info").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        composeTestRule.waitUntil(15000){
+            try {
+                composeTestRule.onNodeWithTag("sessionCardTag").assertIsDisplayed()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+        composeTestRule.onNodeWithText("Progress: 100%").assertExists()
+    }
 
-        val h = Handler()
-        h.postDelayed(r, 10000)*/
-
-        //composeTestRule.(10000, condition = { igaz() })
-
-        //Thread.sleep(10000)
-        //SystemClock.sleep(1500);
-
-
-
-        //igaz()
-
-    /*fun igaz(): Boolean{
-        val handler = Handler(Looper.getMainLooper()).postDelayed({
-            composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
-            composeTestRule.onNodeWithTag("trade").performClick()
-            composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed()
-            return true
-        }, 0)
-        AsyncTask.execute { composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
-            composeTestRule.onNodeWithTag("trade").performClick()
-            composeTestRule.onNodeWithTag("bep szovegmezo").assertIsDisplayed() }
-    }*/
+    
 
     fun Ellenoriz(): Boolean{
         try{

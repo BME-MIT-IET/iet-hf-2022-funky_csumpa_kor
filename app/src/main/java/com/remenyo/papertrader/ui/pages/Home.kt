@@ -58,7 +58,9 @@ fun Home(navController: NavController<Screen>) {
     Scaffold(topBar = {
         TopAppBar("PaperTrader", leftButton = {
             Row(Modifier.padding(8.dp)) {
-                IconButton(onClick = { navController.navigate(Screen.Settings) }) {
+                IconButton(
+                    modifier = Modifier.testTag("settingsButtonTag"),
+                    onClick = { navController.navigate(Screen.Settings) }) {
                     Icon(Icons.Default.Settings, "Settings")
                 }
                 IconButton(onClick = {
@@ -157,7 +159,7 @@ fun SessionCard(session: UserSessionData, navController: NavController<Screen>) 
             .fillMaxWidth()
             .clickable {
                 navController.navigate(Screen.SessionInfo(session.id))
-            }
+            }.testTag("sessionCardTag")
     ) {
         Column(Modifier.padding(8.dp)) {
             if (session.startTS != 0.toLong() && session.endTS != 0.toLong())

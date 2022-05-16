@@ -93,7 +93,7 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
     Scaffold(topBar = {
         TopAppBar(
             "Session info",
-            leftButton = { BackButton { navController.pop() } }, rightButton = {
+            leftButton = { BackButton() { navController.pop() } }, rightButton = {
                 IconButton(onClick = { shareSession() }) {
                     Icon(
                         Icons.Default.Share, "Share session"

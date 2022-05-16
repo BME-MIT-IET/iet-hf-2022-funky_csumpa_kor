@@ -39,11 +39,12 @@ var randomDate=true
 var sYear = 2020
 var sMonth =3
 var sDay = 12
+var sHour = 8
 
 var eYear = mutableStateOf(2020)
 var eMonth =mutableStateOf(3)
 var eDay = mutableStateOf(12)
-
+var eHour = 16
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +55,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
     var sMonth by remember { mutableStateOf(sMonth) }
     var sDay by remember { mutableStateOf(sDay) }
 
-    var sHour by remember { mutableStateOf(8) }
+    var sHour by remember { mutableStateOf(sHour) }
     var sMinute by remember { mutableStateOf(0) }
 
 
@@ -62,7 +63,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
     var eMonth by remember { eMonth }
     var eDay by remember { eDay }
 
-    var eHour by remember { mutableStateOf(16) }
+    var eHour by remember { mutableStateOf(eHour) }
     var eMinute by remember { mutableStateOf(0) }
 
     // true = start, false = end

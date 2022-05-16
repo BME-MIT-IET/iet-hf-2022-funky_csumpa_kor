@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.remenyo.papertrader.AnalyticsHelper.trackScreenView
@@ -83,10 +84,11 @@ fun AutoSaveIntervalSettings() {
     ) {
         Column(Modifier.fillMaxWidth()) {
             Text("Interval: ${sliderValInt.value} seconds")
-            Slider(value = sliderVal, onValueChange = {
+            Slider(
+                value = sliderVal, onValueChange = {
                 sliderVal = it
                 updateVal()
-            }, valueRange = 5f..20f, modifier = Modifier.padding(8.dp, 24.dp), steps = 15)
+            }, valueRange = 5f..20f, modifier = Modifier.testTag("autoSaveSliderTag").padding(8.dp, 24.dp), steps = 15)
         }
     }
 }
