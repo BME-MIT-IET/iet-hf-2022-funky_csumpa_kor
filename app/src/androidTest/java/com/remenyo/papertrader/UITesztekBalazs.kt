@@ -166,16 +166,6 @@ class UITesztekBalazs {
         composeTestRule.onNodeWithText("1x").assertIsDisplayed()
     }
 
-    /* Nem jo nem látja a toast messaget
-    @Test
-    fun loginGombMukodik(){
-        composeTestRule.onNodeWithTag("account").performClick()
-        composeTestRule.onNodeWithTag("emailInputTag").performTextInput("invalid email")
-        composeTestRule.onNodeWithTag("loginButtonTag").performClick()
-        composeTestRule.onNode(matcher = hasText("Failed to login")).assertIsDisplayed()
-    }
-    */
-
     fun Ellenoriz(): Boolean{
         try{
             composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
