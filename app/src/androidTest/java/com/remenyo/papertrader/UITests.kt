@@ -95,7 +95,10 @@ class UITests {
         Waiting({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithTag("limit").performClick()
-        Waiting({composeTestRule.onNodeWithTag("cancel").assertIsDisplayed()})
+        Waiting({
+            composeTestRule.onNodeWithTag("not yet opened").assertIsDisplayed()
+            composeTestRule.onNodeWithTag("cancel").assertIsDisplayed()
+        })
 
         composeTestRule.onNodeWithTag("cancel").performClick()
 
@@ -114,7 +117,11 @@ class UITests {
         Waiting({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithTag("market").performClick()
-        Waiting({composeTestRule.onNodeWithTag("market close").assertIsDisplayed()})
+
+        Waiting({
+            composeTestRule.onNodeWithTag("opened").assertIsDisplayed()
+            composeTestRule.onNodeWithTag("market close").assertIsDisplayed()
+        })
 
         composeTestRule.onNodeWithTag("market close").performClick()
 
@@ -412,9 +419,9 @@ class UITests {
             componentWithTextLoaded("Session info")
         }*/
         composeTestRule.onNodeWithContentDescription("Back").performClick()
-        composeTestRule.waitUntil(15000){
+        /*composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Sessions")
-        }
+        }*/
         Waiting({composeTestRule.onNodeWithText("Progress: 100%").assertExists()})
 
 
