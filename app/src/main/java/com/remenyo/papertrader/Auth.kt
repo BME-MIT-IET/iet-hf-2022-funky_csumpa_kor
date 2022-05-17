@@ -57,19 +57,6 @@ object Auth {
             updateObservables()
         }
         updateObservables()
-
-        // This should be used
-        /*// There are limited circumstances under which GlobalScope can be legitimately and safely used,
-        // such as top-level background processes that must stay active for the whole duration of the
-        // application's lifetime. Because of that, any use of GlobalScope requires an explicit opt-in
-        @OptIn(DelicateCoroutinesApi::class)
-        GlobalScope.launch {
-            while (true) {
-                delay(1000)
-                updateObservables(getCurrentUser())
-            }
-        }*/
-
     }
 
     private suspend fun tryLinkAnonWithEmail(loginEmail: String, emailLink: String): Boolean =
@@ -81,12 +68,6 @@ object Auth {
                     if (task.isSuccessful) {
                         Log.d(TAG, "Successfully linked emailLink credential!")
                         cont.resume(true)
-                        // val result = task.result
-                        // You can access the new user via result.getUser()
-                        // Additional user info profile *not* available via:
-                        // result.getAdditionalUserInfo().getProfile() == null
-                        // You can check if the user is new or existing:
-                        // result.getAdditionalUserInfo().isNewUser()
                     } else {
                         Log.e(
                             TAG, "Error linking emailLink credential", task.exception
@@ -111,7 +92,6 @@ object Auth {
             } catch (e: FirebaseAuthRecentLoginRequiredException) {
                 CoroutineScope(Dispatchers.IO).launch {
                     it.email?.let { it1 -> startEmailLogin(it1) }
-                    // todo toast to tell the user login then can delete
                 }
             }
         }
@@ -145,8 +125,6 @@ object Auth {
                 "Saved email for later login: ${App.KVStore.decodeString(PreferenceKeys.emailToLoginWith_string)}"
             )
 
-            // todo if anon, and auto link does not work, move sessions, and session owner from anon to new, then delete anon
-
             val actionCodeSettings = actionCodeSettings {
                 // URL you want to redirect back to. The domain (www.example.com) for this
                 // URL must be whitelisted in the Firebase Console.
@@ -179,12 +157,6 @@ object Auth {
                         TAG, "Successfully signed in with email link! (${loginEmail})"
                     )
                     cont.resume(true)
-                    // val result = task.result
-                    // You can access the new user via result.getUser()
-                    // Additional user info profile *not* available via:
-                    // result.getAdditionalUserInfo().getProfile() == null
-                    // You can check if the user is new or existing:
-                    // result.getAdditionalUserInfo().isNewUser()
                 } else {
                     Log.e(
                         TAG, "Error signing in with email link", task.exception

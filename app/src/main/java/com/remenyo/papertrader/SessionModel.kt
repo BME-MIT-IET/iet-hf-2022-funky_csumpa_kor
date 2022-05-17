@@ -47,7 +47,6 @@ object SessionModel {
             }
             isSessionDirty = false
         } else if (isTimestampDirty) {
-//            Log.d(TAG, "Updating session currentTS")
             if (!RealtimeDBRepo.updateSessionCurrentTS(sessionData)) {
                 Log.e(TAG, "saveSession updateSessionCurrentTS")
                 return false
@@ -78,18 +77,6 @@ object SessionModel {
         sessionDone = sessionData.endTS <= sessionData.currentTS
         pnl_view = sessionData.pnl()
         upnl_view = sessionData.upnl(currentMarketSellPrice())
-        /*sessionData.orders.values.forEach { master ->
-            val index = orders_view.indexOfFirst { it.id == master.id }
-            if (index == -1) orders_view.add(master)
-            else {
-                if (orders_view[index] != master)
-                    orders_view[index] = master
-                // Log.d(TAG, "Updating ${orders_view[index]} to $master")
-                *//*  orders_view.removeAt(index)
-                  orders_view.add(master)*//*
-            }
-
-        }*/
     }
 
     suspend fun init(sessionID: String): Boolean {
@@ -111,14 +98,8 @@ object SessionModel {
         return true
     }
 
-    /*fun dispose() {
-        Log.i(TAG, "SessionModel dispose")
-    }*/
-
     private fun currentCandle() =
         candles_view.find { it.ts > currentTimestamp } ?: candles_view.lastOrNull() ?: OHLCV()
-
-    // todo close or low/high?
 
     private fun currentMarketSellPrice() = currentCandle.close
 
@@ -142,11 +123,8 @@ object SessionModel {
     private fun orderModifier(id: String, fn: (Order) -> Order) {
         Log.d(TAG, "Modifying order $id: ${sessionData.orders[id]}")
         sessionData.orders[id]?.let { sessionData.orders[id] = fn(sessionData.orders[id]!!) }
-        // orders_view.first { it.id == id }.let(fn)
-        // https://stackoverflow.com/a/69718143
         val index = orders_view.indexOfFirst { it.id == id }
         orders_view[index] = fn(orders_view[index].copy())
-        // updateViews()
     }
 
     /**
@@ -185,12 +163,7 @@ object SessionModel {
             }
         }
 
-        /*private fun trailSep(order: Order, candle: OHLCV) {
-            // moved inside the advanceSession function, to avoid usage anywhere else
-        }*/
-
         fun advanceSession(seconds: Long) {
-            //Log.i(TAG, "Advance by $seconds")
             val newTS = currentTimestamp + seconds
             candles_view.filter { it.ts in (currentTimestamp + 1)..newTS }.forEach { candle ->
                 sessionData.orders.forEach { (id, order) ->
@@ -204,9 +177,7 @@ object SessionModel {
                                 isSessionDirty = true
                                 sessionData.orders[id] = order.copy(closeTS = candle.ts)
                             } else if (order.trailing()) { // else trail the price if trailing is on
-                                // START private fun trailSep(order: Order, candle: OHLCV)
                                 isSessionDirty = true
-                                // trail: new sep price movement depends on multiplier sign (+/-)
                                 if (order.multi > 0 && candle.open < candle.close && sessionData.orders[id]?.sep!! < candle.close - order.trail) { // going up
                                     sessionData.orders[id] =
                                         order.copy(sep = candle.close - order.trail)
@@ -215,7 +186,6 @@ object SessionModel {
                                     sessionData.orders[id] =
                                         order.copy(sep = candle.close + order.trail)
                                 }
-                                // END private fun trailSep(order: Order, candle: OHLCV)
                             }
                         }
                     }
@@ -225,12 +195,10 @@ object SessionModel {
             sessionData = sessionData.copy(currentTS = newTS)
             isTimestampDirty = true
             updateViews()
-
             if (sessionDone) {
                 liquidate()
                 updateViews()
             }
-
         }
     }
 }

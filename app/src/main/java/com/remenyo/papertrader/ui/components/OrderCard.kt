@@ -64,23 +64,21 @@ fun OrderCard(
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                if (!o.cancelled) {
-                    if (!o.closed()) {
-                        if (o.opened()) {
-                            if (marketClose != null) Button(
-                                modifier = Modifier.testTag("market close"),
-                                onClick = { marketClose(o.id) }
-                            ) {
-                                Text(
-                                    "Market close"
-                                )
-                            }
-                        } else if (cancelOrder != null) Button(
-                            modifier = Modifier.testTag("cancel"),
-                            onClick = { cancelOrder(o.id) }
+                if (!o.cancelled && !o.closed()) {
+                    if (o.opened()) {
+                        if (marketClose != null) Button(
+                            modifier = Modifier.testTag("market close"),
+                            onClick = { marketClose(o.id) }
                         ) {
-                            Text("Cancel")
+                            Text(
+                                "Market close"
+                            )
                         }
+                    } else if (cancelOrder != null) Button(
+                        modifier = Modifier.testTag("cancel"),
+                        onClick = { cancelOrder(o.id) }
+                    ) {
+                        Text("Cancel")
                     }
                 }
             }

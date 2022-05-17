@@ -148,7 +148,6 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             throw e
         }
         delay(200L)
-        // todo specify delay including actual processing time
         loading = false
     }
 
@@ -190,9 +189,8 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
         if (start != null && end != null) {
             setStartFromUnix(start * 1000L)
             setEndFromUnix(end * 1000L)
-        } else{
-            if(randomDate)
-                randomizeDate()
+        } else if(randomDate){
+            randomizeDate()
         }
     }
 
@@ -357,12 +355,9 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
                             startTSUnix().floorDiv(1000) + if (addOneHour) 3600 else 60
                         )
                         if (successful) {
-                            // todo navigate to sessioninfo
                             navController.pop()
                             navController.navigate(Screen.SessionInfo(sessionID))
-                        } /*else {
-// todo toast fail
-                        }*/
+                        }
                         loading = false
                     }
                 }) {

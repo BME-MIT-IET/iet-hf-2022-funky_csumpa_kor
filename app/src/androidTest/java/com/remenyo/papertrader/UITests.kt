@@ -21,47 +21,6 @@ class UITests {
         return c.timeInMillis
     }
 
-    //Idő alapú tesztet nem tudunk tesztelni
-    /*
-    @Test
-    fun normalSpeed(){
-        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
-        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("slow").performClick()
-        composeTestRule.onNodeWithTag("back").performClick()
-
-        composeTestRule.onNodeWithTag("new session tag").performClick()
-        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
-
-        Waiting({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
-
-        try {
-            composeTestRule.onNodeWithTag("plus one hour").assertIsOn()
-        }catch (e: AssertionError){
-            composeTestRule.onNodeWithTag("plus one hour").performClick()
-        }
-
-        val startTime = composeTestRule.onNodeWithTag("start time")
-        var noveltIdo:Int=0
-
-        for ((key, value) in startTime.fetchSemanticsNode().config) {
-            if (key.name == "Text"){
-                var eredmeny = value.toString()
-                eredmeny=eredmeny.substring(13, eredmeny.indexOf(':'))
-                noveltIdo=eredmeny.toInt()+1
-            }
-        }
-
-        composeTestRule.onNodeWithTag("create button tag").performClick()
-
-        Waiting({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
-        composeTestRule.onNodeWithTag("trade").performClick()
-
-        composeTestRule.onNodeWithTag("trading active").performClick()
-
-        Waiting({composeTestRule.onNodeWithTag("active time").assertTextContains("$noveltIdo:3",true)},3999)
-    }*/
-
     @Test
     fun sessionInfoPage(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
@@ -389,9 +348,7 @@ class UITests {
             componentWithTextLoaded("Create session")
         }
         composeTestRule.onNodeWithTag("create button tag").performClick()
-        /*composeTestRule.waitUntil(15000){
-            componentWithTextLoaded("Session info")
-        }*/
+
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Sessions")
@@ -415,15 +372,9 @@ class UITests {
             componentWithTextLoaded("Create session")
         }
         composeTestRule.onNodeWithTag("create button tag").performClick()
-        /*composeTestRule.waitUntil(15000){
-            componentWithTextLoaded("Session info")
-        }*/
         Waiting({composeTestRule.onNodeWithText("Progress: 100%").assertExists()})
 
         composeTestRule.onNodeWithContentDescription("Back").performClick()
-        /*composeTestRule.waitUntil(15000){
-            componentWithTextLoaded("Sessions")
-        }*/
         Waiting({composeTestRule.onNodeWithText("Progress: 100%").assertExists()})
 
 
@@ -531,6 +482,4 @@ class UITests {
             return@waitUntil true
         }
     }
-    
-    
 }
