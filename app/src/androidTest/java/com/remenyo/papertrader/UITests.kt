@@ -163,6 +163,9 @@ class UITests {
 
     @Test
     fun invalidTrail(){
+        sHour=8
+        eHour=16
+
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -379,9 +382,9 @@ class UITests {
             componentWithTextLoaded("Create session")
         }
         composeTestRule.onNodeWithTag("create button tag").performClick()
-        composeTestRule.waitUntil(15000){
+        /*composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Session info")
-        }
+        }*/
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Sessions")
@@ -405,14 +408,15 @@ class UITests {
             componentWithTextLoaded("Create session")
         }
         composeTestRule.onNodeWithTag("create button tag").performClick()
-        composeTestRule.waitUntil(15000){
+        /*composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Session info")
-        }
+        }*/
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Sessions")
         }
-        composeTestRule.onNodeWithText("Progress: 100%").assertExists()
+        Waiting({composeTestRule.onNodeWithText("Progress: 100%").assertExists()})
+
 
         eHour=16
     }
