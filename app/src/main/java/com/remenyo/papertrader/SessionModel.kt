@@ -129,9 +129,9 @@ object SessionModel {
 
     private fun addOrderToSessionData(o: Order) {
         isSessionDirty = true
-        /*RealtimeDB.makeDocWithRandomID("/sessions/${sessionData.id}/orders")?.let {
+        RealtimeDB.makeDocWithRandomID("/sessions/${sessionData.id}/orders")?.let {
             sessionData.orders.put(it, o.copy(id = it))
-        }*/
+        }
     }
 
     private fun registerOrder(o: Order) {

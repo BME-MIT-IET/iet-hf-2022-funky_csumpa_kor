@@ -38,6 +38,7 @@ class SessionModelTest {
         currentTS = 0,
         id = "test"
     )
+
     @Test
     fun isTimeStampDirtyTest() = runBlocking{
         mockkObject(SessionModel)
@@ -73,6 +74,11 @@ class SessionModelTest {
         mockkObject(RealtimeDBRepo)
         mockkObject(CandleRepo)
 
+        mockkStatic(FirebaseDatabase::class)
+        every { FirebaseDatabase.getInstance() } returns mockk(relaxed = true)
+
+        mockkObject(RealtimeDB)
+
         var order = Order(
             id="testOrder",
             sep = 0.0,
@@ -92,9 +98,9 @@ class SessionModelTest {
             RealtimeDBRepo.updateSession(any(),any())
         }returns true
 
-/*        coEvery {
+        coEvery {
             RealtimeDB.makeDocWithRandomID(any())
-        } returns null*/
+        } returns null
 
         SessionModel.Command.addMarketOrderToSession(order)
 
