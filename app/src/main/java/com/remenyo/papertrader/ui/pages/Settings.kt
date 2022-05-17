@@ -183,7 +183,8 @@ fun RefreshSpeedSettings() {
                         )
                     }
                     .width(IntrinsicSize.Max)
-                    .weight(1f),
+                    .weight(1f)
+                    .testTag("slow"),
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()

@@ -36,34 +36,70 @@ class UITesztekPatrik {
         return c.timeInMillis
     }
 
+    //Idő alapú tesztet nem tudunk tesztelni
+    /*
+    @Test
+    fun normalSebesseg(){
+        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
+        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("slow").performClick()
+        composeTestRule.onNodeWithTag("back").performClick()
+
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
+
+        try {
+            composeTestRule.onNodeWithTag("plus one hour").assertIsOn()
+        }catch (e: AssertionError){
+            composeTestRule.onNodeWithTag("plus one hour").performClick()
+        }
+
+        val startTime = composeTestRule.onNodeWithTag("start time")
+        var noveltIdo:Int=0
+
+        for ((key, value) in startTime.fetchSemanticsNode().config) {
+            if (key.name == "Text"){
+                var eredmeny = value.toString()
+                eredmeny=eredmeny.substring(13, eredmeny.indexOf(':'))
+                noveltIdo=eredmeny.toInt()+1
+            }
+        }
+
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
+        composeTestRule.onNodeWithTag("trade").performClick()
+
+        composeTestRule.onNodeWithTag("trading active").performClick()
+
+        Varakozas({composeTestRule.onNodeWithTag("active time").assertTextContains("$noveltIdo:3",true)},3999)
+    }*/
+
     @Test
     fun munkamenetInformacioOldal(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
+        /*composeTestRule.waitUntil( 15000) {
             EllenorizEngedelyez()
-        }
+        }*/
+
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled() })
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithTag("market").performClick()
         composeTestRule.onNodeWithTag("limit").performClick()
         composeTestRule.onNodeWithTag("back").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            try {
-                composeTestRule.onNodeWithTag("not yet opened").assertIsDisplayed()
+        Varakozas(
+            { composeTestRule.onNodeWithTag("not yet opened").assertIsDisplayed()
                 composeTestRule.onNodeWithTag("opened").assertIsDisplayed()
-            }catch (e: AssertionError){
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
+            })
     }
 
     @Test
@@ -71,40 +107,18 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithTag("limit").performClick()
-        composeTestRule.waitUntil( 15000) {
-            try {
-                //composeTestRule.onNodeWithTag("not yet opened").assertIsDisplayed()
-                composeTestRule.onNodeWithTag("cancel").assertIsDisplayed()
-
-            }catch (e: AssertionError){
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
+        Varakozas({composeTestRule.onNodeWithTag("cancel").assertIsDisplayed()})
 
         composeTestRule.onNodeWithTag("cancel").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            try {
-                composeTestRule.onNodeWithTag("cancelled").assertIsDisplayed()
-                //composeTestRule.onNodeWithTag("cancel").assertIsNotDisplayed()
-            }catch (e: AssertionError){
-                //composeTestRule.onNodeWithTag("cancel").performClick()
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
+        Varakozas({composeTestRule.onNodeWithTag("cancelled").assertIsDisplayed()})
     }
 
     @Test
@@ -112,37 +126,18 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithTag("market").performClick()
-        composeTestRule.waitUntil( 15000) {
-            try {
-                //composeTestRule.onNodeWithTag("opened").assertIsDisplayed()
-                composeTestRule.onNodeWithTag("market close").assertIsDisplayed()
-            }catch (e: AssertionError){
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
+        Varakozas({composeTestRule.onNodeWithTag("market close").assertIsDisplayed()})
 
         composeTestRule.onNodeWithTag("market close").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            try {
-                composeTestRule.onNodeWithTag("closed").assertIsDisplayed()
-            }catch (e: AssertionError){
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
+        Varakozas({ composeTestRule.onNodeWithTag("closed").assertIsDisplayed()})
     }
 
     @Test
@@ -150,15 +145,11 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
 
         composeTestRule.onNodeWithTag("bep").performTextReplacement("éáőúűóüö")
@@ -173,15 +164,11 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
 
         composeTestRule.onNodeWithTag("sep").performTextReplacement("éáőúűóüö")
@@ -198,15 +185,11 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+       Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
 
         composeTestRule.onNodeWithTag("trailing stop").performClick()
@@ -225,15 +208,11 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
 
         composeTestRule.onNodeWithTag("trailing stop").performClick()
@@ -247,15 +226,11 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("randomize").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         var tartalmazas=false
         try {
@@ -277,9 +252,7 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
     }
 
     @Test
@@ -287,9 +260,7 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         try {
             composeTestRule.onNodeWithTag("plus one hour").assertIsOn()
@@ -310,9 +281,7 @@ class UITesztekPatrik {
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
 
         composeTestRule.onNodeWithTag("active time").assertTextContains("$noveltIdo:0",true)
@@ -323,9 +292,7 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         try {
             composeTestRule.onNodeWithTag("plus one hour").assertIsOff()
@@ -346,9 +313,7 @@ class UITesztekPatrik {
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
 
         composeTestRule.onNodeWithTag("active time").assertTextContains("$ido:0",true)
@@ -366,15 +331,7 @@ class UITesztekPatrik {
 
         composeTestRule.onNodeWithTag("new session tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            try {
-                composeTestRule.onNodeWithTag("not available").assertIsDisplayed()
-            }catch (e: AssertionError){
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
-        //composeTestRule.onNodeWithTag("create button tag").performClick()
+        Varakozas({composeTestRule.onNodeWithTag("not available").assertIsDisplayed()})
 
         randomDate=true
 
@@ -385,18 +342,9 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("account").performClick()
         composeTestRule.onNodeWithTag("delete account").performClick()
         composeTestRule.onNodeWithTag("sure to delete account").performClick()
-        //composeTestRule.onNodeWithTag("sure to delete account").perform
 
-        composeTestRule.waitUntil(15000){
-            try {
-                composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()
-            }catch (e: AssertionError){
-                return@waitUntil false
-            }
-            return@waitUntil true
-        }
+        Varakozas({composeTestRule.onNodeWithTag("no sessions").assertIsDisplayed()})
 
-        //composeTestRule.onNodeWithTag("trade")
     }
 
     @Test
@@ -404,15 +352,11 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
-        composeTestRule.waitUntil( 15000) {
-            Ellenoriz()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("trade").assertIsDisplayed()})
         composeTestRule.onNodeWithTag("trade").performClick()
         composeTestRule.onNodeWithTag("bep").assertIsDisplayed()
 
@@ -420,40 +364,56 @@ class UITesztekPatrik {
         composeTestRule.onNodeWithTag("bep").performTextClearance()
         composeTestRule.onNodeWithTag("bep").performTextInput("1234")
 
-        composeTestRule.waitUntil( 15000) {
-            EllenorizLimit()
-        }
+        Varakozas({composeTestRule.onNodeWithTag("limit").assertExists()})
 
         composeTestRule.onNodeWithTag("limit").assertTextEquals("Limit @ 1234")
     }
 
+    @Test
+    fun profilGomb(){
+        composeTestRule.onNodeWithTag("account").performClick()
+        Varakozas({composeTestRule.onNodeWithTag("loginButtonTag").assertIsDisplayed()})
+    }
 
-    fun Ellenoriz(): Boolean{
+
+    fun Varakozas(ellenorzes:()->SemanticsNodeInteraction, ido: Long =15000){
+        composeTestRule.waitUntil(ido){
+            try {
+                ellenorzes()
+            }catch (e: AssertionError){
+                return@waitUntil false
+            }
+            return@waitUntil true
+        }
+    }
+
+
+    /*fun Ellenoriz(): Boolean{
         try{
             composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
         }catch (e: AssertionError){
             return false
         }
         return true
-    }
+    }*/
 
-    fun EllenorizEngedelyez():Boolean{
+    /*fun EllenorizEngedelyez():Boolean{
         try {
             composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()
         }catch (e: AssertionError){
             return false
         }
         return true
-    }
+    }*/
 
-    fun EllenorizLimit():Boolean{
+    /*fun EllenorizLimit():Boolean{
         try {
             composeTestRule.onNodeWithTag("limit").assertExists()
         }catch (e: AssertionError){
             return false
         }
         return true
-    }
+    }*/
 
 
 
