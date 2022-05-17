@@ -1,6 +1,7 @@
 package com.remenyo.papertrader
 
 import android.os.PerformanceHintManager
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -12,6 +13,7 @@ import io.mockk.*
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.*
+import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
@@ -40,6 +42,14 @@ class SessionModelTest {
         id = "test",
         orders = mutableMapOf<String,Order>("first" to Order(cancelled = false, id = "OrderToCancel")),
     )
+
+    @Before
+    fun initialization(){
+        SessionModel.sessionData=SessionData(
+
+        )
+        SessionModel.orders_view = SnapshotStateList()
+    }
 
     @Test
     fun isTimeStampDirtyTest() = runBlocking{
@@ -149,6 +159,42 @@ class SessionModelTest {
 
         assertEquals(true, SessionModel.sessionData.orders["first"]!!.cancelled)
 
+        unmockkAll()
+    }
 
+    @Test
+    fun isMarketClosed() = runBlocking {
+        mockkObject(SessionModel)
+        mockkObject(RealtimeDBRepo)
+        mockkObject(CandleRepo)
+
+        mockkStatic(FirebaseDatabase::class)
+        every { FirebaseDatabase.getInstance() } returns mockk(relaxed = true)
+
+        mockkObject(RealtimeDB)
+
+        coEvery {
+            RealtimeDBRepo.fetchSession(sd.id)
+        } returns sd
+
+        coEvery {
+            CandleRepo.getRange(sd.startTS,sd.endTS)
+        } returns candles
+
+        coEvery {
+            RealtimeDBRepo.updateSession(any(),any())
+        }returns true
+
+        coEvery {
+            RealtimeDB.makeDocWithRandomID(any())
+        } returns null
+
+        SessionModel.sessionData.orders.put("first", Order(cancelled = false, id = "OrderToCancel", sep = 2.0))
+        SessionModel.orders_view.add(Order(cancelled = false, id = "first"))
+
+        SessionModel.Command.marketClose("first")
+
+        assertEquals(0, SessionModel.sessionData.orders["first"]!!.closeTS)
+        assertEquals(0.0,SessionModel.sessionData.orders["first"]!!.sep)
     }
 }
