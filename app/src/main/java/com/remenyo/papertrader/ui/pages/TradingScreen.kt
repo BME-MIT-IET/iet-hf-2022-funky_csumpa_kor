@@ -42,7 +42,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -138,8 +137,7 @@ fun Trading(
                 )
                 Log.d("PaperTrader_Trading", "Advancing session by $advanceSeconds seconds")
                 SessionModel.Command.advanceSession(advanceSeconds) // the side effect itself
-
-                delay(refreshIntervalMs) // todo substract process time
+                delay(refreshIntervalMs)
             }
             SessionModel.saveSession()
         } else if (SessionModel.sessionDone) {
@@ -306,15 +304,6 @@ fun Trading(
                 Modifier.height(IntrinsicSize.Max),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                /*Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                }*/
                 Text("Trailing stop")
                 Spacer(Modifier.width(8.dp))
                 Switch(
@@ -430,11 +419,10 @@ fun Trading(
         else
             Column(Modifier.padding(paddingValues)) {
                 Column(Modifier.padding(12.dp)) {
-                    if (!SessionModel.sessionDone)
-                        if (speedUpBoxDialog) {
-                            SpeedModifier()
-                            Spacer(Modifier.height(10.dp))
-                        }
+                    if (!SessionModel.sessionDone && speedUpBoxDialog) {
+                        SpeedModifier()
+                        Spacer(Modifier.height(10.dp))
+                    }
                     Box(
                         modifier = Modifier.height(230.dp)
                     ) {

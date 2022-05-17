@@ -163,11 +163,10 @@ class App : ComponentActivity() {
             recoverSavedData()
 
 
-            // todo until signinflow + dynamic links is not done, show loading screen
+
             setContent {
                 val navController = rememberNavController(
                     initialBackStack
-                    // todo welcome screen on first start
                 )
 
                 NavBackHandler(navController)

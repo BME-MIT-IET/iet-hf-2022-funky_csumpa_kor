@@ -76,9 +76,8 @@ fun Home(navController: NavController<Screen>) {
                         putExtra(Intent.EXTRA_TEXT, "Hi,\n")
                         selector = selectorIntent
                     }
-                    if (emailIntent.resolveActivity(context.packageManager) != null) {
+                    if (emailIntent.resolveActivity(context.packageManager) != null)
                         context.startActivity(emailIntent)
-                    }
                 }) {
                     Icon(Icons.Default.Feedback, "Feedback")
                 }

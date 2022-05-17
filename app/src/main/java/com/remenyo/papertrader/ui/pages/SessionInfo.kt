@@ -84,7 +84,6 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
             startActivity(context, share, null)
         }.addOnFailureListener {
             AnalyticsHelper.reportException(it)
-            // todo toast error
             Log.e(TAG, it.message, it)
         }
     }
