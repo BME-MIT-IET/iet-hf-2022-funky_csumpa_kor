@@ -418,6 +418,8 @@ class UITests {
         /*composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Session info")
         }*/
+        Waiting({composeTestRule.onNodeWithText("Progress: 100%").assertExists()})
+
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         /*composeTestRule.waitUntil(15000){
             componentWithTextLoaded("Sessions")
