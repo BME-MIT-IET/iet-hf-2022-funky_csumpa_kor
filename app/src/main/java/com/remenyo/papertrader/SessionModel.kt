@@ -40,7 +40,7 @@ object SessionModel {
 
     suspend fun saveSession(): Boolean {
         if (isSessionDirty) {
-            Log.d(TAG, "Saving session")
+//            Log.d(TAG, "Saving session")
             if (!RealtimeDBRepo.updateSession(sessionData, currentMarketSellPrice)) {
                 Log.e(TAG, "saveSession updateSession")
                 return false
@@ -121,7 +121,7 @@ object SessionModel {
     }
 
     private fun orderModifier(id: String, fn: (Order) -> Order) {
-        Log.d(TAG, "Modifying order $id: ${sessionData.orders[id]}")
+        //Log.d(TAG, "Modifying order $id: ${sessionData.orders[id]}")
         sessionData.orders[id]?.let { sessionData.orders[id] = fn(sessionData.orders[id]!!) }
         val index = orders_view.indexOfFirst { it.id == id }
         orders_view[index] = fn(orders_view[index].copy())
