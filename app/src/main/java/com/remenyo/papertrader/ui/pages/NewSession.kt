@@ -14,6 +14,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.remenyo.papertrader.API
@@ -32,24 +35,35 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
+var randomDate=true
+var sYear = 2020
+var sMonth =3
+var sDay = 12
+var sHour = 8
+
+var eYear = mutableStateOf(2020)
+var eMonth =mutableStateOf(3)
+var eDay = mutableStateOf(12)
+var eHour = 16
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewSession(navController: NavController<Screen>, start: Long? = null, end: Long? = null) {
     trackScreenView("new_session")
 
-    var sYear by remember { mutableStateOf(2020) }
-    var sMonth by remember { mutableStateOf(3) }
-    var sDay by remember { mutableStateOf(12) }
+    var sYear by remember { mutableStateOf(sYear) }
+    var sMonth by remember { mutableStateOf(sMonth) }
+    var sDay by remember { mutableStateOf(sDay) }
 
-    var sHour by remember { mutableStateOf(8) }
+    var sHour by remember { mutableStateOf(sHour) }
     var sMinute by remember { mutableStateOf(0) }
 
 
-    var eYear by remember { mutableStateOf(2020) }
-    var eMonth by remember { mutableStateOf(3) }
-    var eDay by remember { mutableStateOf(12) }
+    var eYear by remember { eYear}
+    var eMonth by remember { eMonth }
+    var eDay by remember { eDay }
 
-    var eHour by remember { mutableStateOf(16) }
+    var eHour by remember { mutableStateOf(eHour) }
     var eMinute by remember { mutableStateOf(0) }
 
     // true = start, false = end
@@ -176,7 +190,10 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
         if (start != null && end != null) {
             setStartFromUnix(start * 1000L)
             setEndFromUnix(end * 1000L)
-        } else randomizeDate()
+        } else{
+            if(randomDate)
+                randomizeDate()
+        }
     }
 
     val dateFormat = SimpleDateFormat.getDateInstance()
@@ -236,7 +253,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             Row {
                 OutlinedButton(
                     shape = RoundShapes.medium,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("first date"),
                     onClick = {
                         startOrEndDate = true
                         makeDatePickerDialog(context).show()
@@ -268,7 +285,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             }
             Spacer(Modifier.height(8.dp))
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("randomize"),
                 shape = RoundShapes.medium,
                 onClick = { randomizeDate() }) {
                 Text("Randomize Date", textAlign = TextAlign.Center)
@@ -281,7 +298,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             Row {
                 OutlinedButton(
                     shape = RoundShapes.medium,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("start time"),
                     onClick = {
                         startOrEndDate = true
                         makeTimePickerDialog(context).show()
@@ -312,7 +329,7 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
             }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = addOneHour, onCheckedChange = { addOneHour = it })
+                Checkbox(modifier=Modifier.testTag("plus one hour") ,checked = addOneHour, onCheckedChange = { addOneHour = it })
                 Text(
                     "Start from T+1h (Have price history at start)",
                     modifier = Modifier.clickable { addOneHour = !addOneHour })
@@ -325,12 +342,12 @@ fun NewSession(navController: NavController<Screen>, start: Long? = null, end: L
                 timespanAvailable -> {
                     Text("The specified timespan is fully available")
                 }
-                else -> Text("The specified timespan is not available.")
+                else -> Text("The specified timespan is not available.", Modifier.testTag("not available"))
             }
             Spacer(Modifier.height(16.dp))
             Button(
                 enabled = !loading && timespanAvailable,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().semantics { testTag = "create button tag" },
                 onClick = {
                     coroutineScope.launch {
                         loading = true

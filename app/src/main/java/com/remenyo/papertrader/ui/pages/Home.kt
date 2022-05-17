@@ -16,6 +16,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -55,7 +58,9 @@ fun Home(navController: NavController<Screen>) {
     Scaffold(topBar = {
         TopAppBar("PaperTrader", leftButton = {
             Row(Modifier.padding(8.dp)) {
-                IconButton(onClick = { navController.navigate(Screen.Settings) }) {
+                IconButton(
+                    modifier = Modifier.testTag("settingsButtonTag"),
+                    onClick = { navController.navigate(Screen.Settings) }) {
                     Icon(Icons.Default.Settings, "Settings")
                 }
                 IconButton(onClick = {
@@ -79,14 +84,16 @@ fun Home(navController: NavController<Screen>) {
                 }
             }
         }, rightButton = {
-            IconButton(onClick = { navController.navigate(Screen.Login) }) {
+            IconButton(onClick = { navController.navigate(Screen.Login) }, modifier = Modifier.testTag("account")) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.AccountCircle, "Account")
                 }
             }
         })
     }, floatingActionButton = {
-        ExtendedFloatingActionButton(content = {
+        ExtendedFloatingActionButton(
+            modifier = Modifier.semantics { testTag = "new session tag" },
+            content = {
             Icon(Icons.Default.Add, "Add")
             Spacer(Modifier.width(8.dp))
             Text("New Session")
@@ -110,6 +117,7 @@ fun Home(navController: NavController<Screen>) {
 
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                         if (Auth.isUserAnon) TextButton(
+                            modifier= Modifier.semantics { testTag = "udvozol" },
                             onClick = { navController.navigate(Screen.Login) },
                             content = {
                                 Text(
@@ -125,7 +133,8 @@ fun Home(navController: NavController<Screen>) {
                     if (userSessions.isEmpty()) {
                         Text(
                             "You don't have any sessions yet.\nClick New Session to start.",
-                            style = AppTypography.labelLarge
+                            style = AppTypography.labelLarge,
+                            modifier = Modifier.testTag("no sessions")
                         )
                     } else {
                         LazyColumn(Modifier.fillMaxHeight()) {
@@ -148,7 +157,9 @@ fun SessionCard(session: UserSessionData, navController: NavController<Screen>) 
     Card(
         Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate(Screen.SessionInfo(session.id)) }
+            .clickable {
+                navController.navigate(Screen.SessionInfo(session.id))
+            }.testTag("sessionCardTag")
     ) {
         Column(Modifier.padding(8.dp)) {
             if (session.startTS != 0.toLong() && session.endTS != 0.toLong())

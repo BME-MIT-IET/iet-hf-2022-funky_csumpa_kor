@@ -17,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -157,7 +160,8 @@ fun Trading(
                         .background(colorScheme.primary)
                         .padding(4.dp, 2.dp)
                         .fillMaxHeight()
-                        .clickable { tradingActive = !tradingActive },
+                        .clickable { tradingActive = !tradingActive }
+                        .testTag("trading active"),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (tradingActive) Icon(
@@ -181,6 +185,7 @@ fun Trading(
                 ) {
                     Text(
                         longTimeFromUnixTimestamp(ts = SessionModel.currentTimestamp),
+                        modifier=Modifier.testTag("active time"),
                         color = colorScheme.onPrimary,
                         style = TextStyle(fontWeight = FontWeight.W600)
                     )
@@ -276,7 +281,7 @@ fun Trading(
                         onDone = { keyboardController?.hide() }),
                     singleLine = true,
                     placeholder = { Text("Where buy happens") },
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).semantics { testTag = "bep" },
                     isError = !bepCorrect() && bep.isNotEmpty(),
                 )
                 Spacer(Modifier.width(8.dp))
@@ -292,7 +297,7 @@ fun Trading(
                         onDone = { keyboardController?.hide() }),
                     singleLine = true,
                     placeholder = { Text("Where sell happens") },
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("sep"),
                     isError = !sepCorrect() && sep.isNotEmpty()
                 )
             }
@@ -312,7 +317,10 @@ fun Trading(
                 }*/
                 Text("Trailing stop")
                 Spacer(Modifier.width(8.dp))
-                Switch(checked = trailingEnabled, onCheckedChange = { trailingEnabled = it })
+                Switch(
+                    checked = trailingEnabled,
+                    onCheckedChange = { trailingEnabled = it },
+                    modifier = Modifier.testTag("trailing stop"))
                 Spacer(Modifier.width(8.dp))
                 TextField(
                     value = trailAmount,
@@ -328,7 +336,8 @@ fun Trading(
                     placeholder = { Text("Follows price by this amount") },
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight(),
+                        .fillMaxHeight()
+                        .testTag("trail value"),
                     isError = !trailCorrect() && trailingEnabled,
                     enabled = trailingEnabled
                 )
@@ -340,7 +349,8 @@ fun Trading(
                     onClick = { sendLimitOrder() },
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(1f),
+                        .weight(1f)
+                        .testTag("limit"),
                     enabled = bepCorrect() && sepCorrect() && multiCorrect() && (!trailingEnabled || trailCorrect())
                 ) {
                     Text("Limit @ $bep", textAlign = TextAlign.Center)
@@ -351,7 +361,8 @@ fun Trading(
                     onClick = { sendMarketOrder() },
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(1f),
+                        .weight(1f)
+                        .testTag("market"),
                     enabled = sepCorrect() && multiCorrect() && (!trailingEnabled || trailCorrect())
                 ) {
                     Text(
@@ -384,7 +395,7 @@ fun Trading(
                     value = multi,
                     onValueChange = { multi = it },
                     valueRange = -maxMultiplier.toFloat()..+maxMultiplier.toFloat(),
-                    modifier = Modifier.padding(10.dp, 0.dp),
+                    modifier = Modifier.padding(10.dp, 0.dp).testTag("sessionMultiSliderTag"),
                     steps = ((maxMultiplier - 1) * 2) + 1 // i don't understand why do I have to subtract one from maxMultiplier
                 )
             }
