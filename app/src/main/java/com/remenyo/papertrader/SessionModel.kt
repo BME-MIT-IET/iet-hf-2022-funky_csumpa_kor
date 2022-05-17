@@ -140,7 +140,7 @@ object SessionModel {
     }
 
     private fun orderModifier(id: String, fn: (Order) -> Order) {
-        Log.d(TAG, "Modifying order $id: ${sessionData.orders[id]}")
+        //Log.d(TAG, "Modifying order $id: ${sessionData.orders[id]}")
         sessionData.orders[id]?.let { sessionData.orders[id] = fn(sessionData.orders[id]!!) }
         // orders_view.first { it.id == id }.let(fn)
         // https://stackoverflow.com/a/69718143

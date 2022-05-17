@@ -10,6 +10,7 @@ import com.remenyo.papertrader.db.realtime.RealtimeDBRepo
 import com.remenyo.papertrader.db.room.CandleRepo
 import io.mockk.*
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.*
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -36,7 +37,8 @@ class SessionModelTest {
         startTS = 0,
         endTS = 10,
         currentTS = 0,
-        id = "test"
+        id = "test",
+        orders = mutableMapOf<String,Order>("first" to Order(cancelled = false, id = "OrderToCancel")),
     )
 
     @Test
@@ -107,6 +109,46 @@ class SessionModelTest {
         SessionModel.saveSession()
 
         coVerify { RealtimeDBRepo.updateSession(SessionData(currentTS = 0),0.0) }
+
+        unmockkAll()
+
+    }
+
+
+    @Test
+    fun isOrderCancelled()= runBlocking {
+        mockkObject(SessionModel)
+        mockkObject(RealtimeDBRepo)
+        mockkObject(CandleRepo)
+
+        mockkStatic(FirebaseDatabase::class)
+        every { FirebaseDatabase.getInstance() } returns mockk(relaxed = true)
+
+        mockkObject(RealtimeDB)
+
+        coEvery {
+            RealtimeDBRepo.fetchSession(sd.id)
+        } returns sd
+
+        coEvery {
+            CandleRepo.getRange(sd.startTS,sd.endTS)
+        } returns candles
+
+        coEvery {
+            RealtimeDBRepo.updateSession(any(),any())
+        }returns true
+
+        coEvery {
+            RealtimeDB.makeDocWithRandomID(any())
+        } returns null
+
+        SessionModel.sessionData.orders.put("first", Order(cancelled = false, id = "OrderToCancel"))
+        SessionModel.orders_view.add(Order(cancelled = false, id = "first"))
+
+        SessionModel.Command.cancelOrder("first")
+
+        assertEquals(true, SessionModel.sessionData.orders["first"]!!.cancelled)
+
 
     }
 }
