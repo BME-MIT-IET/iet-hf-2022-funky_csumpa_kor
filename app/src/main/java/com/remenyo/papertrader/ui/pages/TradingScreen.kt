@@ -395,7 +395,7 @@ fun Trading(
                     value = multi,
                     onValueChange = { multi = it },
                     valueRange = -maxMultiplier.toFloat()..+maxMultiplier.toFloat(),
-                    modifier = Modifier.padding(10.dp, 0.dp),
+                    modifier = Modifier.padding(10.dp, 0.dp).testTag("sessionMultiSliderTag"),
                     steps = ((maxMultiplier - 1) * 2) + 1 // i don't understand why do I have to subtract one from maxMultiplier
                 )
             }
