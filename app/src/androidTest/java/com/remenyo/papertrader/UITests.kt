@@ -1,34 +1,19 @@
 package com.remenyo.papertrader
 
-import android.util.Log
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.with
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.test.InstrumentationRegistry.getTargetContext
-import androidx.test.platform.app.InstrumentationRegistry
 import com.remenyo.papertrader.ui.components.*
-import com.remenyo.papertrader.ui.components.trading.Trading
-import com.remenyo.papertrader.ui.theme.AppTheme
-import com.tencent.mmkv.MMKV
-import dev.olshevski.navigation.reimagined.*
-import junit.framework.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.lang.AssertionError
 import java.text.SimpleDateFormat
 import java.util.*
 
-class UITesztekPatrik {
+class UITests {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<App>()
-    //val composeTestRule = createComposeRule()
-    // use createAndroidComposeRule<YourActivity>() if you need access to
-    // an activity
 
     fun getUnixTsFromDate(mYear: Int, mMonth: Int, mDay: Int): Long {
         val c = Calendar.getInstance()
@@ -39,7 +24,7 @@ class UITesztekPatrik {
     //Idő alapú tesztet nem tudunk tesztelni
     /*
     @Test
-    fun normalSebesseg(){
+    fun normalSpeed(){
         composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
         composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
         composeTestRule.onNodeWithTag("slow").performClick()
@@ -78,13 +63,9 @@ class UITesztekPatrik {
     }*/
 
     @Test
-    fun munkamenetInformacioOldal(){
+    fun sessionInfoPage(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
-
-        /*composeTestRule.waitUntil( 15000) {
-            EllenorizEngedelyez()
-        }*/
 
         Waiting({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled() })
 
@@ -103,7 +84,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun limitCsempe(){
+    fun limitCard(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -122,7 +103,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun marketCsempe(){
+    fun marketCard(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -141,7 +122,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun helytelenBep(){
+    fun invalidBep(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -160,7 +141,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun helytelenSep(){
+    fun invalidSep(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -181,11 +162,11 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun helytelenKoveto(){
+    fun invalidTrail(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
-       Waiting({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
+        Waiting({composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()})
 
         composeTestRule.onNodeWithTag("create button tag").performClick()
 
@@ -204,7 +185,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun kovetoBeallit(){
+    fun setTrail(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -222,7 +203,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun randomGombEllenorzes(){
+    fun checkRandomButton(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -235,7 +216,8 @@ class UITesztekPatrik {
         var tartalmazas=false
         try {
             composeTestRule.onNodeWithTag("first date")
-                .assertTextContains(SimpleDateFormat.getDateInstance()
+                .assertTextContains(
+                    SimpleDateFormat.getDateInstance()
                     .format(getUnixTsFromDate(sYear, sMonth, sDay)))
         }catch (e: AssertionError){
             tartalmazas=true
@@ -248,7 +230,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun letrehozSessionSikeres(){
+    fun createNewSessionSuccessfully(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -256,7 +238,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun letrehozSessionPlusz1oraBepipalva(){
+    fun createNewSessionPlus1HourChecked(){
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -288,7 +270,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun letrehozSessionPlusz1oraNincsPipa() {
+    fun createNewSessionPlus1HourUnchecked() {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -320,25 +302,25 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun letrehozSessionSikertelen(){
-        randomDate=false
-        sYear=  2022
-        sMonth=  5
-        sDay=  16
-        eYear= mutableStateOf( 2022)
-        eMonth= mutableStateOf( 5)
-        eDay= mutableStateOf( 16)
+    fun createNewSessionUnsuccessfully(){
+        randomDate =false
+        sYear =  2022
+        sMonth =  5
+        sDay =  16
+        eYear = mutableStateOf( 2022)
+        eMonth = mutableStateOf( 5)
+        eDay = mutableStateOf( 16)
 
         composeTestRule.onNodeWithTag("new session tag").performClick()
 
         Waiting({composeTestRule.onNodeWithTag("not available").assertIsDisplayed()})
 
-        randomDate=true
+        randomDate =true
 
     }
 
     @Test
-    fun felhasznaloTorles(){
+    fun deleteAccount(){
         composeTestRule.onNodeWithTag("account").performClick()
         composeTestRule.onNodeWithTag("delete account").performClick()
         composeTestRule.onNodeWithTag("sure to delete account").performClick()
@@ -348,7 +330,7 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun limitValtoztat() {
+    fun changeLimit() {
         composeTestRule.onNodeWithTag("new session tag").performClick()
         composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
 
@@ -370,13 +352,163 @@ class UITesztekPatrik {
     }
 
     @Test
-    fun profilGomb(){
+    fun profileButton(){
         composeTestRule.onNodeWithTag("account").performClick()
         Waiting({composeTestRule.onNodeWithTag("loginButtonTag").assertIsDisplayed()})
     }
 
+    @Test
+    fun settingsButtonWorking(){
+        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
+        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+    }
 
-    fun Waiting(ellenorzes:()->SemanticsNodeInteraction, ido: Long =15000){
+    @Test
+    fun progressNotFinished(){
+        sHour = 8
+        eHour = 16
+        composeTestRule.onNodeWithTag("account").performClick()
+        composeTestRule.onNodeWithTag("delete account").performClick()
+        composeTestRule.onNodeWithTag("sure to delete account").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("New Session")
+        }
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Create session")
+        }
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("Session info")
+        }
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("Sessions")
+        }
+        composeTestRule.onNodeWithText("Progress: 100%").assertDoesNotExist()
+    }
+
+    @Test
+    fun progressFinished(){
+        sHour = 8
+        eHour = 9
+        composeTestRule.onNodeWithTag("account").performClick()
+        composeTestRule.onNodeWithTag("delete account").performClick()
+        composeTestRule.onNodeWithTag("sure to delete account").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("New Session")
+        }
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Create session")
+        }
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("Session info")
+        }
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("Sessions")
+        }
+        composeTestRule.onNodeWithText("Progress: 100%").assertExists()
+
+        eHour=16
+    }
+
+    @Test
+    fun autoSaveSliderTest(){
+        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
+        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("autoSaveSliderTag").performTouchInput {
+            click(Offset(centerRight.x, centerY))
+        }
+        composeTestRule.onNodeWithText("Interval: 20 seconds").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("autoSaveSliderTag").performTouchInput {
+            click(Offset(centerLeft.x, centerY))
+        }
+        composeTestRule.onNodeWithText("Interval: 5 seconds").assertIsDisplayed()
+    }
+
+    @Test
+    fun settingsMultiplierSliderLeftTest(){
+        sHour = 8
+        eHour = 16
+        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
+        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("multiplierSliderTag").performTouchInput {
+            click(Offset(centerLeft.x, centerY))
+        }
+        composeTestRule.onNodeWithText("Max multi: +/- 1x").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("New Session")
+        }
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Create session")
+        }
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("Session info")
+        }
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Trade")
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Session")
+        }
+        composeTestRule.onNodeWithTag("sessionMultiSliderTag").performTouchInput {
+            click(Offset(centerRight.x, centerY))
+        }
+        composeTestRule.onNodeWithText("1x").assertIsDisplayed()
+    }
+
+    @Test
+    fun settingsMultiplierSliderRightTest(){
+        composeTestRule.onNodeWithTag("settingsButtonTag").performClick()
+        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("multiplierSliderTag").performTouchInput {
+            click(Offset(centerRight.x, centerY))
+        }
+        composeTestRule.onNodeWithText("Max multi: +/- 20x").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        composeTestRule.waitUntil(15000){
+            componentWithTextLoaded("New Session")
+        }
+        composeTestRule.onNodeWithTag("new session tag").performClick()
+        composeTestRule.onNodeWithTag("create button tag").assertIsDisplayed()
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Create session")
+        }
+        composeTestRule.onNodeWithTag("create button tag").performClick()
+
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Trade")
+        }
+        composeTestRule.onNodeWithTag("trade").performClick()
+        composeTestRule.waitUntil( 15000) {
+            componentWithTextLoaded("Session")
+        }
+        composeTestRule.onNodeWithTag("sessionMultiSliderTag").performTouchInput {
+            click(Offset(centerRight.x, centerY))
+        }
+        composeTestRule.onNodeWithText("20x").assertIsDisplayed()
+    }
+
+    private fun componentWithTextLoaded(string: String): Boolean{
+        try {
+            composeTestRule.onNodeWithText(string).assertIsDisplayed()
+        }catch (e: AssertionError){
+            return false
+        }
+        return true
+    }
+
+    fun Waiting(ellenorzes:()-> SemanticsNodeInteraction, ido: Long =15000){
         composeTestRule.waitUntil(ido){
             try {
                 ellenorzes()
@@ -386,36 +518,6 @@ class UITesztekPatrik {
             return@waitUntil true
         }
     }
-
-
-    /*fun Ellenoriz(): Boolean{
-        try{
-            composeTestRule.onNodeWithTag("trade").assertIsDisplayed()
-        }catch (e: AssertionError){
-            return false
-        }
-        return true
-    }*/
-
-    /*fun EllenorizEngedelyez():Boolean{
-        try {
-            composeTestRule.onNodeWithTag("create button tag").assertIsEnabled()
-        }catch (e: AssertionError){
-            return false
-        }
-        return true
-    }*/
-
-    /*fun EllenorizLimit():Boolean{
-        try {
-            composeTestRule.onNodeWithTag("limit").assertExists()
-        }catch (e: AssertionError){
-            return false
-        }
-        return true
-    }*/
-
-
-
-
+    
+    
 }
