@@ -28,6 +28,7 @@ import dev.olshevski.navigation.reimagined.NavBackHandler
 import dev.olshevski.navigation.reimagined.rememberNavController
 import kotlinx.coroutines.*
 import kotlinx.parcelize.Parcelize
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -59,6 +60,14 @@ class App : ComponentActivity() {
     companion object {
         lateinit var KVStore: MMKV
         private const val TAG = "PaperTrader_Main"
+        var offset:Int = 0
+    }
+
+    override fun onResume() {
+        val calendar = Calendar.getInstance(Locale.getDefault());
+        val offset = -(calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / 1000
+        App.offset=offset
+        super.onResume()
     }
 
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
@@ -154,11 +163,10 @@ class App : ComponentActivity() {
             recoverSavedData()
 
 
-            // todo until signinflow + dynamic links is not done, show loading screen
+
             setContent {
                 val navController = rememberNavController(
                     initialBackStack
-                    // todo welcome screen on first start
                 )
 
                 NavBackHandler(navController)

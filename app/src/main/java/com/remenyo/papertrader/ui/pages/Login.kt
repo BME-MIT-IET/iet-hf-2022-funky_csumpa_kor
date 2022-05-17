@@ -2,6 +2,7 @@ package com.remenyo.papertrader.ui.components
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -88,7 +90,7 @@ fun Login(navController: NavController<Screen>) {
                         loading = false
                         navController.pop()
                     }
-                }) {
+                }, modifier = Modifier.testTag("sure to delete account")) {
                     Text("Delete", color = colorScheme.error)
                 }
             },
@@ -138,7 +140,7 @@ fun Login(navController: NavController<Screen>) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     singleLine = true,
                     placeholder = { Text("user@mail.com") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("emailInputTag"),
                 )
             }
             Spacer(modifier = Modifier.height(48.dp))
@@ -163,13 +165,18 @@ fun Login(navController: NavController<Screen>) {
                             coroutineScope.launch {
                                 if (Auth.startEmailLogin(email)) {
                                     openEmailDialog = true
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to login",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                                 loading = false
-                                // todo else toast failure
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("loginButtonTag"),
                     shape = RoundShapes.small,
                     enabled = !loading
                 ) {
@@ -188,7 +195,13 @@ fun Login(navController: NavController<Screen>) {
                 Spacer(Modifier.height(8.dp))
                 // src: https://stackoverflow.com/a/67244131
                 val annotatedText = buildAnnotatedString {
-                    append("By signing up, you agree to the")
+                    withStyle(
+                        style = SpanStyle(
+                            color = colorScheme.secondary
+                        )
+                    ){
+                            append("By signing up, you agree to the")
+                        }
                     pushStringAnnotation(
                         tag = "ToS",// provide tag which will then be provided when you click the text
                         annotation = "ToS"
@@ -200,7 +213,13 @@ fun Login(navController: NavController<Screen>) {
                     ) {
                         append(" Terms of Service")
                     }
-                    append(" and")
+                    withStyle(
+                        style = SpanStyle(
+                            color = colorScheme.secondary
+                        )
+                    ) {
+                        append(" and")
+                    }
                     pushStringAnnotation(
                         tag = "PrivacyPolicy",// provide tag which will then be provided when you click the text
                         annotation = "PrivacyPolicy"
@@ -254,9 +273,14 @@ fun Login(navController: NavController<Screen>) {
             Spacer(Modifier.height(16.dp))
             if (Auth.signedIn) {
                 TextButton(
+                    modifier = Modifier.testTag("delete account"),
                     onClick = {
                         deleteUserConfirmDialog = true
-                        // todo toast account deleted
+                        Toast.makeText(
+                            context,
+                            "Account deleted.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }, enabled = !loading
                 ) {
                     Text(text = "Delete account", style = TextStyle(color = colorScheme.error))

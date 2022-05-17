@@ -8,12 +8,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.remenyo.papertrader.Order
 import com.remenyo.papertrader.shortTimeFromUnixTimestamp
 import com.remenyo.papertrader.ui.theme.colorScheme
 import com.remenyo.papertrader.ui.theme.loss
 import com.remenyo.papertrader.ui.theme.profit
+
+var azonosito=0
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,30 +51,34 @@ fun OrderCard(
             Spacer(Modifier.weight(1f))
             Column(horizontalAlignment = Alignment.End) {
                 if (o.cancelled) {
-                    Text("Cancelled", color = colorScheme.error)
+                    Text("Cancelled", color = colorScheme.error, modifier = Modifier.testTag("cancelled"))
                 } else {
                     if (o.opened()) {
                         if (o.closed()) {
-                            Text("Closed at ${shortTimeFromUnixTimestamp(ts = o.closeTS)}")
+                            Text("Closed at ${shortTimeFromUnixTimestamp(ts = o.closeTS)}", modifier = Modifier.testTag("closed"))
                         } else {
-                            Text("Opened", color = colorScheme.primary)
+                            Text("Opened", color = colorScheme.primary, modifier = Modifier.testTag("opened"))
                         }
                     } else {
-                        Text("Not yet opened")
+                        Text("Not yet opened", modifier = Modifier.testTag("not yet opened"))
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                if (!o.cancelled) {
-                    if (!o.closed()) {
-                        if (o.opened()) {
-                            if (marketClose != null) Button(onClick = { marketClose(o.id) }) {
-                                Text(
-                                    "Market close"
-                                )
-                            }
-                        } else if (cancelOrder != null) Button(onClick = { cancelOrder(o.id) }) {
-                            Text("Cancel")
+                if (!o.cancelled && !o.closed()) {
+                    if (o.opened()) {
+                        if (marketClose != null) Button(
+                            modifier = Modifier.testTag("market close"),
+                            onClick = { marketClose(o.id) }
+                        ) {
+                            Text(
+                                "Market close"
+                            )
                         }
+                    } else if (cancelOrder != null) Button(
+                        modifier = Modifier.testTag("cancel"),
+                        onClick = { cancelOrder(o.id) }
+                    ) {
+                        Text("Cancel")
                     }
                 }
             }

@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -28,6 +30,7 @@ import com.remenyo.papertrader.ui.theme.profit
 import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +84,6 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
             startActivity(context, share, null)
         }.addOnFailureListener {
             AnalyticsHelper.reportException(it)
-            // todo toast error
             Log.e(TAG, it.message, it)
         }
     }
@@ -90,7 +92,7 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
     Scaffold(topBar = {
         TopAppBar(
             "Session info",
-            leftButton = { BackButton { navController.pop() } }, rightButton = {
+            leftButton = { BackButton() { navController.pop() } }, rightButton = {
                 IconButton(onClick = { shareSession() }) {
                     Icon(
                         Icons.Default.Share, "Share session"
@@ -142,7 +144,7 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
                     )
                     Spacer(Modifier.height(16.dp))
                     Button(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().semantics { testTag="trade" },
                         onClick = { navController.navigate(Screen.SessionPlay(SessionModel.sessionData.id)) }) {
                         Text(if (SessionModel.currentTimestamp < SessionModel.sessionData.endTS) "Trade" else "View chart")
                     }
@@ -155,7 +157,9 @@ fun SessionInfo(navController: NavController<Screen>, id: String) {
                     Spacer(Modifier.height(8.dp))
                     Box(
                         modifier = Modifier.height(230.dp)
-                    ) { Chart() }
+                    ) {
+                        Chart()
+                    }
                 }
                 Spacer(Modifier.height(16.dp))
                 Text("Orders", style = AppTypography.headlineLarge)

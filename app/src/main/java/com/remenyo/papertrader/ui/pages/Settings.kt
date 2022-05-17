@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.remenyo.papertrader.AnalyticsHelper.trackScreenView
@@ -28,7 +29,6 @@ import kotlin.math.roundToInt
 @Composable
 fun Settings(navController: NavController<Screen>) {
     trackScreenView("settings")
-
     Scaffold(topBar = {
         TopAppBar(text = "Settings", leftButton = { BackButton { navController.pop() } })
     }) {
@@ -37,7 +37,6 @@ fun Settings(navController: NavController<Screen>) {
             item { AutoSaveIntervalSettings() }
             item { MultiplierSettings() }
             item { AppInfo() }
-            /*item { CrashTheApp() }*/
         }
     }
 }
@@ -49,21 +48,6 @@ fun AppInfo() {
         Text("UserID: ${Auth.uid}")
     }
 }
-
-/*@Composable
-fun CrashTheApp() {
-    SettingsCard(
-        title = "Test crash",
-        description = "Crash the app to test Crashlytics integration"
-    ) {
-        TextButton(onClick = {
-            AnalyticsHelper.reportLog("Test Log")
-            throw RuntimeException("Test crash")
-        }) {
-            Text(text = "CRASH", color = colorScheme.error)
-        }
-    }
-}*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,7 +67,6 @@ fun SettingsCard(title: String, description: String, content: @Composable () -> 
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutoSaveIntervalSettings() {
     var sliderVal by remember {
@@ -93,23 +76,19 @@ fun AutoSaveIntervalSettings() {
             ).toFloat()
         )
     }
-
     val sliderValInt = derivedStateOf { sliderVal.roundToInt() }
-
-    fun updateVal() =
-        App.KVStore.encode(PreferenceKeys.autoSaveIntervalSec_long, sliderValInt.value.toLong())
-
-
+    fun updateVal() = App.KVStore.encode(PreferenceKeys.autoSaveIntervalSec_long, sliderValInt.value.toLong())
     SettingsCard(
         title = "Autosave Interval",
         description = "How often should the game do automatically save during trading?"
     ) {
         Column(Modifier.fillMaxWidth()) {
             Text("Interval: ${sliderValInt.value} seconds")
-            Slider(value = sliderVal, onValueChange = {
+            Slider(
+                value = sliderVal, onValueChange = {
                 sliderVal = it
                 updateVal()
-            }, valueRange = 5f..20f, modifier = Modifier.padding(8.dp, 24.dp), steps = 15)
+            }, valueRange = 5f..20f, modifier = Modifier.testTag("autoSaveSliderTag").padding(8.dp, 24.dp), steps = 15)
         }
     }
 }
@@ -123,23 +102,18 @@ fun MultiplierSettings() {
             ).toFloat()
         )
     }
-
     val maxMultiplierValInt = derivedStateOf { maxMultiplier.roundToInt() }
-
-    fun updateVal() =
-        App.KVStore.encode(PreferenceKeys.maxMultiplier_int, maxMultiplierValInt.value)
-
+    fun updateVal() = App.KVStore.encode(PreferenceKeys.maxMultiplier_int, maxMultiplierValInt.value)
     SettingsCard(title = "Multiplier", description = "Maximum multiplier in game") {
         Column(Modifier.fillMaxWidth()) {
             Text("Max multi: +/- ${maxMultiplierValInt.value}x")
             Slider(value = maxMultiplier, onValueChange = {
                 maxMultiplier = it
                 updateVal()
-            }, valueRange = 1f..20f, modifier = Modifier.padding(8.dp, 24.dp), steps = 20)
+            }, valueRange = 1f..20f, modifier = Modifier.testTag("multiplierSliderTag").padding(8.dp, 24.dp), steps = 20)
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -209,7 +183,8 @@ fun RefreshSpeedSettings() {
                         )
                     }
                     .width(IntrinsicSize.Max)
-                    .weight(1f),
+                    .weight(1f)
+                    .testTag("slow"),
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()
