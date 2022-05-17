@@ -23,3 +23,6 @@ Englert Dániel \
 Szemán Benjámin \
 2022.05.10. 10:00 - 3.5 óra - Alkalmazás vizsgálata, kód megértése \
 2022.05.10. - 2 óra - Első Unit teszthez Mockolás felépítése, Debuggolás
+2022.05.16. - 3 óra - További Unit tesztekkel kapcsolatos problémák megfejtése megoldása.
+2022.05.17. - 3 óra - Unit tesztek véglegesítése, befejezése.
+2022.05.17. - 3 óra - Manuális (funkcionális) tesztek végrehajtása, dokumentálása. 
