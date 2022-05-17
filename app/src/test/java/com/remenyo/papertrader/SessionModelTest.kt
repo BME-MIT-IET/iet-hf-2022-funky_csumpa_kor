@@ -1,6 +1,9 @@
 package com.remenyo.papertrader
 
 import android.os.PerformanceHintManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.remenyo.papertrader.db.realtime.RealtimeDB
 import com.remenyo.papertrader.db.realtime.RealtimeDBRepo
@@ -60,13 +63,14 @@ class SessionModelTest {
         assertEquals(SessionModel.currentTimestamp,1)
 
         coVerify { RealtimeDBRepo.updateSessionCurrentTS(SessionData(currentTS = 1)) }
+
+        unmockkAll()
     }
 
     @Test
     fun isSessionDirtyTest() = runBlocking {
         mockkObject(SessionModel)
         mockkObject(RealtimeDBRepo)
-        mockkObject(RealtimeDB)
         mockkObject(CandleRepo)
 
         var order = Order(
@@ -88,16 +92,15 @@ class SessionModelTest {
             RealtimeDBRepo.updateSession(any(),any())
         }returns true
 
-        coEvery {
+/*        coEvery {
             RealtimeDB.makeDocWithRandomID(any())
-        } returns null
-
+        } returns null*/
 
         SessionModel.Command.addMarketOrderToSession(order)
 
         SessionModel.saveSession()
 
-        coVerify { RealtimeDBRepo.updateSession(any(),any()) }
+        coVerify { RealtimeDBRepo.updateSession(SessionData(currentTS = 0),0.0) }
 
     }
 }

@@ -40,7 +40,7 @@ object SessionModel {
 
     suspend fun saveSession(): Boolean {
         if (isSessionDirty) {
-            Log.d(TAG, "Saving session")
+//            Log.d(TAG, "Saving session")
             if (!RealtimeDBRepo.updateSession(sessionData, currentMarketSellPrice)) {
                 Log.e(TAG, "saveSession updateSession")
                 return false
@@ -129,9 +129,9 @@ object SessionModel {
 
     private fun addOrderToSessionData(o: Order) {
         isSessionDirty = true
-        RealtimeDB.makeDocWithRandomID("/sessions/${sessionData.id}/orders")?.let {
+        /*RealtimeDB.makeDocWithRandomID("/sessions/${sessionData.id}/orders")?.let {
             sessionData.orders.put(it, o.copy(id = it))
-        }
+        }*/
     }
 
     private fun registerOrder(o: Order) {
