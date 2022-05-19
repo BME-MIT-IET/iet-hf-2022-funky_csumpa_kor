@@ -1,6 +1,9 @@
 # Manuális átvizsgálás, SonarLint
 
-A projekt egy fejlesztés alatt álló compose android alkalmazás. A fejlesztés amikor megkezdődött a compose még nagyon kezdetleges állapotban állt (még most is), ezért
-találhatók érdekes megoldások a kódban, ami elsőre fucsának tűnt például felugró ablakok egy booleant ellenörző if-ekkel vannak megoldva. Utána jártam, elvileg így kell megoldani.
-A SonarLint is sok critikusnak számító kognitív komplexitás hibát dobott, amik elkerülhetetlenek a compose használata miatt, de jelzett hibás egymásba ágyazott if-eket is.
-Mivel a projekt fejlesztés alatt áll manuális átvizsgálás során főleg bent maradt, nem használt függvényeket kellet kiszedni, illetve az olvashatóságot lehetett javítani. Az Issue-n Marton Balázs és Pekár Patrik dolgozott.
+A projektet manuálisan átvizsgáltuk SonarLint statikus analízis eszköz futtatása mellet. A jelzett hibákat melyek főleg fölöslegesen egymásba ágyazott if-ek,
+nem használt importok, illetve kritikusnak számító kognitív komplexitások-ból álltak megvizsgáltuk és ahol szükséges volt javítottuk. A nem jelzett hibákat, melyek főleg
+olvashatósági problémák, nem használt függvények voltak szintén javítottuk. Az Issue-n Marton Balázs és Pekár Patrik dolgozott.
+ 
+Ezek eredményeképpen egy olvashatóbb, átláthatóbb kódot kaptunk.
+
+A tanulság, hogy a projekt igényesen van megírva, jól struktúrált, de fejlesztés alatt áll és elég friss technológiát használ. Nem találtunk/jelzett sok hibát a statikus analízis eszköz, a jelzésekből is jópár annak köszönhető, hogy compose-ban folyik a fejlesztés, melyben a megjelenés leírásához sok elágazás szükséges, pl: megjelenő ablak is if-el jelenítődik meg.
